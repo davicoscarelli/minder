@@ -53,6 +53,7 @@ class UserController {
    * @param {View} ctx.view
    */
   async show ({ params, request, response, view }) {
+    
   }
 
   /**
