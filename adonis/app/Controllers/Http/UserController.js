@@ -18,6 +18,7 @@ class UserController {
    * @param {View} ctx.view
    */
   async index ({ request, response, view }) {
+    response.send("vrau")
   }
 
   /**
@@ -53,6 +54,7 @@ class UserController {
    * @param {View} ctx.view
    */
   async show ({ params, request, response, view }) {
+    
   }
 
   /**
