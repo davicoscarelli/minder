@@ -4,7 +4,7 @@
 const Route = use("Route");
 
 Route.group(() => {
-  Route.post("me", "UserController.index").as("auth.me");
+  Route.get("me", "UserController.index").as("auth.me");
   // Route.post("login", "AuthController.login").as("auth.login");
   // Route.post("refresh", "AuthController.refresh").as("auth.refresh");
   // Route.post("logout", "AuthController.logout").as("auth.logout");
