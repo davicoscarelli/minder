@@ -10,6 +10,15 @@
 | provider here.
 |
 */
+
+const globalMiddleware = [
+  'Adonis/Middleware/AuthInit'
+]
+
+const namedMiddleware = {
+  auth: 'Adonis/Middleware/Auth'
+}
+
 const providers = [
   '@adonisjs/framework/providers/AppProvider',
   '@adonisjs/framework/providers/ViewProvider',
@@ -58,4 +67,4 @@ const aliases = {}
 */
 const commands = []
 
-module.exports = { providers, aceProviders, aliases, commands }
+module.exports = { providers, aceProviders, aliases, commands, globalMiddleware, namedMiddleware }
