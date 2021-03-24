@@ -1,5 +1,5 @@
 "use strict";
 
-require("./auth");
+require("./client");
 
 
