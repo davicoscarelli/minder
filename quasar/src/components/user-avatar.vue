@@ -83,6 +83,7 @@
 
 <script>
 import { Notify } from 'quasar'
+import { User } from 'src/models/User'
 
 export default {
   data: () => ({
@@ -109,9 +110,9 @@ export default {
     },
     async logout() {
       const userName = this.user.name
-      // this.loading = true
-      // await User.logout()
-      // this.loading = false
+      this.loading = true
+      await User.logout()
+      this.loading = false
       this.$q.dark.set(false)
 
       this.$router.push('/auth/login')

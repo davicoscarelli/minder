@@ -4,6 +4,9 @@
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
+const Database = use("Database");
+const User = use("App/Models/User");
+
 /**
  * Resourceful controller for interacting with users
  */
@@ -19,6 +22,10 @@ class UserController {
    */
   async index ({ request, response, view }) {
     response.send("vrau")
+  }
+
+  async login ({ request, response, view }) {
+    response.send("vrau login")
   }
 
   /**
@@ -42,6 +49,11 @@ class UserController {
    * @param {Response} ctx.response
    */
   async store ({ request, response }) {
+    let newUser = request.all()
+    console.log(newUser)    
+    const user = await User.create(newUser);
+
+    return response.status(201).send(user);
   }
 
   /**

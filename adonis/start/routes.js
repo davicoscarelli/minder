@@ -19,3 +19,10 @@ const Route = use('Route')
 Route.on('/').render('welcome')
 
 Route.resource("clients", "UserController").apiOnly();
+
+Route.group(() => {
+    Route.post("login", "AuthController.login").as("auth.login");
+    // Route.post("refresh", "AuthController.refresh").as("auth.refresh");
+    Route.post("logout", "AuthController.logout").as("auth.logout");
+    // Route.post("me", "AuthController.me").as("auth.me");
+  }).prefix("/auth")

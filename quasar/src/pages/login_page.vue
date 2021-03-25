@@ -17,10 +17,7 @@
 .col-login
   width: 400px
   height: 450px
-.col-register
-  width: 400px
-  height: 500px
-  padding-top: calc(100% / 10 - 5px)
+
 
 
 @media (max-width: 878px) 
@@ -114,32 +111,25 @@
                       type="submit"
                     />
                   </div>
+                  <div class="row justify-center">
+                    <q-btn
+                      class="login-button text-bold q-mt-md q-px-md"
+                      unelevated
+                      no-caps
+                      rounded
+                      outline
+                      color="primary"
+                      label="Register"
+                      size="15px"
+                      @click="$router.push('/auth/register')"
+                    />
+                  </div>
                 </div>
               </q-form>
             </q-card>
           </div>
 
-          <!-- <div class="col-register">
-            <div>
-              <div class="row justify-center">
-                <label class="text-accent text-bold presentation-text">{{
-                  $t('login.notInCommunity')
-                }}</label>
-              </div>
-              <div class="row justify-center">
-                <q-btn
-                  class="q-mt-xl q-px-md"
-                  unelevated
-                  no-caps
-                  rounded
-                  color="accent"
-                  :label="$t('login.wantToBePart')"
-                  size="20px"
-                  @click="$router.push('/register')"
-                />
-              </div>
-            </div>
-          </div> -->
+          
         </div>
       </div>
     </div>
@@ -148,7 +138,7 @@
 </template>
 
 <script>
-// import { User } from 'src/models/User'
+import { User } from 'src/models/User'
 export default {
   name: 'login-page',
   data: () => ({
@@ -158,16 +148,10 @@ export default {
   }),
   methods: {
     async login() {
-      // const success = await new User().login(this.form)
-      // if (success === 401) {
-      //   this.verifyAccount = true
-
-      // }else if (success){
-      //   this.$i18n.locale = localStorage.lang 
+      const success = await new User().login(this.form)
+      if (success){
         window.location.href = '/'
-      // }else{
-
-      // }
+      }
     },
   }
 }
