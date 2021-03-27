@@ -35,9 +35,7 @@
       <div class="q-pa-md">
     
         <div class="row q-pa-sm q-mb-md justify-center">
-          <h5 class="TitlePage text-primary text-left">
-            Personal Info
-          </h5>
+          
         </div>
         <div class="row justify-center">
           <q-form class="q-mb-xl" @submit="update()">
