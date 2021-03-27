@@ -46,7 +46,7 @@
 
 <script>
 import VueTinder from 'vue-tinder'
-import source from "../bing";
+import { User } from 'src/models/User'
 
 export default {
   name: 'PageIndex',
@@ -61,6 +61,11 @@ export default {
   }),
   created() {
     this.getQueue();
+  },
+  computed: {
+    user(){
+      return User.getUser()
+    }
   },
   methods: {
     open(){

@@ -93,8 +93,7 @@ export default {
   }),
   computed: {
     user() {
-      // return User.getUser()
-      return {name: 'Davi Coscarelli', avatar: ''}
+      return User.getUser()
     },
     iconColor() {
       return this.$q.dark.isActive ? 'white' : 'primary'

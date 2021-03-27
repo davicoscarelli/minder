@@ -7,6 +7,7 @@
 const Database = use("Database");
 const User = use("App/Models/User");
 
+const ModelHelper = require("../../Helpers/ModelHelper");
 /**
  * Resourceful controller for interacting with users
  */
@@ -24,9 +25,7 @@ class UserController {
     response.send("vrau")
   }
 
-  async login ({ request, response, view }) {
-    response.send("vrau login")
-  }
+  
 
   /**
    * Render a form to be used for creating a new user.
@@ -49,11 +48,17 @@ class UserController {
    * @param {Response} ctx.response
    */
   async store ({ request, response }) {
-    let newUser = request.all()
-    console.log(newUser)    
-    const user = await User.create(newUser);
+    try {
+      let newUser = request.all()
+      console.log(newUser)    
+      const user = await User.create(newUser);
 
-    return response.status(201).send(user);
+      return response.status(201).send(user);
+      
+    } catch (error) {
+      console.log(error)
+    }
+    
   }
 
   /**
@@ -65,8 +70,20 @@ class UserController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
-    
+   async show({ response, auth }) {
+    try {
+      let user = await auth.getUser();
+      if (user){
+        user = await User.query()
+          .where("id", user.id)
+          .first();
+
+        return response.send(user);
+
+      }
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   /**
@@ -90,6 +107,30 @@ class UserController {
    * @param {Response} ctx.response
    */
   async update ({ params, request, response }) {
+    try{
+      const allRequest = request.all();
+      
+      const user = ModelHelper.fillable(allRequest, [...User.fillable, "id"]);
+      console.log(user)
+      const userToUpdate = await User.find(user.id);
+
+      userToUpdate.merge(user);
+
+      await userToUpdate.save();
+
+      
+
+      const userUpdated = await User.find(user.id);
+      console.log(userUpdated)
+
+      return response.status(201).send(userUpdated);
+
+    }catch(e){
+      console.log(e)
+      trx.rollback();
+      return response.status(400).send('notUpdated');
+    }
+    
   }
 
   /**

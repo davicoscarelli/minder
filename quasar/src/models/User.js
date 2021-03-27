@@ -9,8 +9,8 @@ export class User {
     localStorage.removeItem('access_token')
     localStorage.removeItem('refresh_token')
     localStorage.removeItem('user')
-    localStorage.removeItem('address')
-    localStorage.removeItem('info')
+    // localStorage.removeItem('address')
+    // localStorage.removeItem('info')
 
     axios.defaults.headers.Authorization = ''
     this.loggedUser = undefined
@@ -38,14 +38,14 @@ export class User {
           localStorage.setItem('access_token', data.tokens.token)
           localStorage.setItem('refresh_token', data.tokens.refreshToken)
         
-        Notify.create({ type: 'positive', message: `Bem vindo!` })
+        Notify.create({ type: 'positive', message: `Welcome!` })
         return true
       }
     } catch (e) {
         console.log(e)
         Notify.create({
           type: 'negative',
-          message: `Login ou senha incorretos`
+          message: `Login or password incorrect!`
         })
         return false
       
@@ -110,28 +110,20 @@ export class User {
         ? await put(url, payload)
         : await post(url, payload)
       if (status >= 200 && status <= 300) {
-        if (payload.avatar && payload.avatar.length > 100) {
-          payload.avatar = data.message
-          payload.avatar_url = `${data.message}`
-        }
-        payload.avatar = payload.avatar_url
-        payload.payment_info = {}
-        payload.paymentStatus = data.paymentStatus
+        // if (payload.avatar && payload.avatar.length > 100) {
+        //   payload.avatar = data.message
+        //   payload.avatar_url = `${data.message}`
+        // }
+        // payload.avatar = payload.avatar_url
+        // payload.payment_info = {}
+        // payload.paymentStatus = data.paymentStatus
         localStorage.user = JSON.stringify(payload)
-        if (payload.id){
-          if (payload.password) {
-          }
-        }else{
-          if (payload.plan.plan_id == 1){
-            // Notify.create({ type: 'positive', message: `Usuário Cadastrado!` })
-          }
-        }
         
         return true
       }
       
     } catch (e) {
-      //Notify.create({ type: 'negative', message: `Usuário Não Cadastrado!` })
+      Notify.create({ type: 'negative', message: `User not created!` })
       return e.response
     }
   }

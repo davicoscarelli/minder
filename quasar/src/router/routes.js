@@ -10,6 +10,12 @@ const routes = [
         meta: { name: 'Home' },
         component: () => import('pages/Index.vue')
       },
+      {
+        path: '/my-account',
+        name: 'myaccount',
+        meta: { name: 'My Account' },
+        component: () => import('pages/my_account_page.vue')
+      },
     ]
   },
   {

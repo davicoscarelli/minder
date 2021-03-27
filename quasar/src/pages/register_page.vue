@@ -70,7 +70,6 @@
                   maxlength="60"
                   outlined
                   v-model="form.name"
-                  placeholder="Name"
                   :rules="[val => !!val || 'Required']"
                 />
               </div>
@@ -79,7 +78,7 @@
 
               <div class="col-12 col-md-6">
                 <label class="text-accent text-bold ajust" for="email"
-                  >{{$t('register.email')}}</label
+                  >Email</label
                 >
                 <q-input
                   class="q-mt-sm"
@@ -89,33 +88,14 @@
                   maxlength="60"
                   ref="email"
                   v-model="form.email"
-                  :placeholder="$t('register.email')"
-                  :rules="[val => !!val || $t('general.requiredField'), isValidEmail, verifyEmail]"
+                  :rules="[val => !!val || 'Required', isValidEmail]"
 
                 />
               </div>
 
-              <div class="col-12 col-md-6">
-                <label class="text-accent text-bold ajust" for="email"
-                  >{{$t('register.emailconfirmation')}}</label
-                >
-                <q-input
-                  class="q-mt-sm"
-                  id="email"
-                  rounded
-                  outlined
-                  maxlength="60"
-                  v-model="form.emailconfirmation"
-                  :placeholder="$t('register.emailconfirmation')"
-                  :rules="[val => !!val || $t('general.requiredField'), isValidEmail, val => val == $refs.email.value ||  $t('register.emailDidntMatch')]"
-
-                />
-              </div>
 
               <div class="col-12 col-md-6">
-                <label class="text-accent text-bold ajust" for="password">{{
-                  $t('register.password')
-                }}</label>
+                <label class="text-accent text-bold ajust" for="password">Password</label>
                 <q-input
                     class="q-mt-sm"
                     id="password"
@@ -124,9 +104,8 @@
                     outlined
                     ref="password"
                     v-model="form.password"
-                    :placeholder="$t('login.password')"
                     :type="isPwd ? 'password' : 'text'"
-                    :rules="[val => !!val || $t('general.requiredField'), isValidPassword]"
+                    :rules="[val => !!val || 'Required', isValidPassword]"
                   >
                     <template v-slot:prepend>
                       <q-icon color="grey-6" name="lock" />
@@ -142,35 +121,6 @@
                   </q-input>
               </div>
 
-              <div class="col-12 col-md-6">
-                <label class="text-accent text-bold ajust" for="password">{{
-                  $t('register.passwordconfirmation')
-                }}</label>
-                <q-input
-                    class="q-mt-sm"
-                    id="password"
-                    rounded
-                    outlined
-                    maxlength="30"
-                    v-model="form.passwordconfirmation"
-                    :placeholder="$t('register.passwordconfirmation')"
-                    :type="isConfirmPwd ? 'password' : 'text'"
-                    :rules="[val => !!val || $t('general.requiredField'), isValidPassword, val => val == $refs.password.value ||  $t('register.passwordDidntMatch')]"
-                  >
-                    <template v-slot:prepend>
-                      <q-icon color="grey-6" name="lock" />
-                    </template>
-                    <template v-slot:append>
-                      <q-icon
-                        color="grey-6"
-                        :name="isConfirmPwd ? 'visibility_off' : 'visibility'"
-                        class="cursor-pointer"
-                        @click="isConfirmPwd = !isConfirmPwd"
-                      />
-                    </template>
-                  </q-input>
-              </div>
-
               
             </div>
             <div class="justify-center flex">
@@ -180,8 +130,9 @@
                 unelevated
                 rounded
                 no-caps
-                color="accent"
-                :label="$t('general.return')"
+                outline
+                color="primary"
+                label="Return"
                 size="16px"
               />
               <q-btn
@@ -191,7 +142,7 @@
                 rounded
                 no-caps
                 color="positive"
-                :label="$t('register.next')"
+                label="Next"
                 size="16px"
               />
           </div>
@@ -202,7 +153,7 @@
 
       <q-step
         :name="2"
-        :title="$t('register.step2')"
+        title="Preferences"
         icon="mdi-map-marker"
         :done="done2"
         class="q-px-sm"
@@ -210,7 +161,7 @@
       >
         <div class="row q-pa-sm q-mb-md justify-center">
           <h5 class="TitlePage text-primary text-left">
-            {{ $t('register.title2') }}
+            What do you like?
           </h5>
         </div>
 
@@ -228,8 +179,9 @@
             unelevated
             rounded
             no-caps
-            color="accent"
-            :label="$t('general.return')"
+            outline
+            color="primary"
+            label="Return"
             size="16px"
           />
           <q-btn
@@ -244,7 +196,7 @@
             rounded
             no-caps
             color="positive"
-            :label="$t('register.next')"
+            label="Next"
             size="16px"
           />
         </q-stepper-navigation>
@@ -252,7 +204,7 @@
 
       <q-step
         :name="3"
-        :title="$t('register.step3')"
+        title="Bio"
         icon="mdi-currency-usd"
         :done="done3"
         class="q-px-sm"
@@ -261,7 +213,7 @@
         <!-- begin  -->
         <div class="row q-pa-sm q-mb-md justify-center">
           <h5 class="TitlePage text-primary text-left">
-            {{ $t('register.title3') }}
+            Show yourself
           </h5>
         </div>
         <div class="row justify-evenly q-pa-md">
@@ -270,26 +222,30 @@
 
         <!-- end plans -->
         <q-stepper-navigation class="justify-center flex q-pt-none q-mt-none">
+         
           <q-btn
             @click="step = 2"
-            class="q-ml-md q-mb-md q-px-md text-bold"
-            style="width: 150px"
+            class="q-ma-md q-px-md text-bold btn-size"
             unelevated
             rounded
             no-caps
-            color="accent"
-            :label="$t('general.return')"
-            size="20px"
+            dense
+            outline
+            color="primary"
+            label="Return"
+            size="16px"
           />
-          <!-- <q-btn
-            @click="done3 = true"
-            class="q-ma-md q-px-md"
+          <q-btn
+            @click="register"
+            class="q-ma-md q-px-md text-bold btn-size"
             unelevated
             rounded
+            no-caps
+            :loading="loading"
             color="positive"
-            label="Concluir"
-            size="20px"
-          /> -->
+            label="Register"
+            size="16px"
+          />
         </q-stepper-navigation>
       </q-step>
       
@@ -297,7 +253,7 @@
 
     
     <q-dialog v-model="success">
-        <q-card class="text-center" style="border-radius: 15px; width: 500px">
+        <q-card class="text-center" style="border-radius: 15px; width: 300px">
           <q-card-section class=" col-12 text-center q-mt-sm">
             <!-- <img
               src="~assets/check.png"
@@ -311,16 +267,14 @@
               class="text-primary text-bold"
               style="font-size: 18pt; text-align: center"
             >
-              {{
-                $t('register.successRegister')
-              }}
+              Account successfully registered!
             </p>
           </div>
           <q-card-section>
             <q-card-actions class="col-12 justify-center">
 
               <q-btn
-                :label="$t('general.ok')"
+                label="Ok"
                 size="15px"
                 color="positive"
                 class="text-bold"
@@ -350,7 +304,7 @@ export default {
     done1: false,
     done2: false,
     done3: false,
-    loading: 0,
+    loading: false,
     error: false,
     success: false,
     isPwd: true,
@@ -359,6 +313,14 @@ export default {
     date: '2001/01/01'
   }),
   methods: {
+    async register() {
+      this.loading = true
+      const success = await User.register(this.form)
+      if (success){
+        this.loading = false
+        this.success = true
+      }
+    },
     
     async submitStep1(){
       if(this.form.name && this.form.email  && this.form.password ){

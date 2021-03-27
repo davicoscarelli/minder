@@ -19,6 +19,7 @@ const Route = use('Route')
 Route.on('/').render('welcome')
 
 Route.resource("clients", "UserController").apiOnly();
+Route.get("myaccount", "UserController.show").as("myaccount");
 
 Route.group(() => {
     Route.post("login", "AuthController.login").as("auth.login");
