@@ -28,10 +28,21 @@ class User extends Model {
   static get fillable() {
     return [
       "name",
+      "avatar",
       "email",
       "password",
       
     ];
+  }
+  static get computed() {
+    return ["avatar_url"];
+  }
+
+  getAvatarUrl(user) {
+    const { avatar } = user;
+    if (avatar && avatar.search("http") !== -1) return avatar;
+    const baseUrl = Env.get("APP_ENDPOINT");
+    return `${baseUrl}/user_storage/${avatar}`;
   }
 
   /**
@@ -51,6 +62,8 @@ class User extends Model {
   photos () {
     return this.hasMany('App/Models/UserPhotos')
   }
+
+  
 }
 
 module.exports = User

@@ -11,7 +11,17 @@
   height: 0
   padding-bottom: 33%
   position: relative
-  
+ 
+.image-container
+  width: 100px
+  height: 100px
+  border-radius: 5px
+
+.image-select
+  width: 100px
+  height: 100px
+  border: 1px solid grey
+  border-radius: 5px
 
 @media (max-width: $breakpoint-xs-max)
   .container 
@@ -40,6 +50,15 @@
         <div class="row justify-center">
           <q-form class="q-mb-xl" @submit="update()">
             <div class="row justify-center q-col-gutter-sm">
+              <div class="col-12 flex flex-center">
+                <ImageCrop
+                  @change="changePhoto"
+                  :photo="avatar.photo"
+                  :ratio="1"
+                  class="q-mr-md"
+                  size="100px"
+                />
+              </div>
               <div class="col-12 col-md-6">
                 <label class="text-accent text-bold ajust" for="name">
                   Name
@@ -74,12 +93,22 @@
 
                 />
               </div>
-
-
-              
-
-              
             </div>
+
+            <div class="col-12 col-md-6">
+              <label class="text-accent text-bold ajust" for="photos"
+                    >Profile Photos</label
+                  >
+
+              <div class="row">
+                <div v-for="img in form.photos" :key="img.id" class="image">
+                </div>
+                <div class="q-mt-sm image-select flex flex-center cursor-pointer">
+                  <q-icon name="add" size="26pt" color="grey"/>
+                </div>
+              </div>
+            </div>
+            
             <div class="justify-center flex">
               <q-btn
                 type="submit"
@@ -151,13 +180,22 @@ export default {
     loading: false,
     error: false,
     success: false,
-    form: { },
+    form: {
+      photos: {
+        id: 0,
+        user_id: 0,
+        url: '',
+    }},
+    avatar: {}
   }),
   computed: {
     user(){
       return User.getUser()
       
     }
+  },
+  components: {
+    ImageCrop: () => import('components/image-crop'),
   },
   beforeMount() {
     this.$q.loading.show({
@@ -176,12 +214,23 @@ export default {
   methods: {
     async update() {
       this.loading = true
+      console.log(this.form.images)
       const success = await User.register(this.form)
       if (success){
         this.loading = false
         this.success = true
       }
     },
+    changePhoto(photo) {
+      this.form.avatar = photo
+      this.avatar = photo
+      this.form.avatar_url = null
+      this.avatarchanged = true
+      Notify.create({
+            type: 'warning',
+            message: `Clique em Atualizar para validar a alteração da sua imagem!`
+          })
+      },
 
      async getUserData() {
       const { data } = await this.$http.get('myaccount')
@@ -189,6 +238,13 @@ export default {
       
       // Object.assign(this.form, data)
       this.form = data
+      if (data.avatar){
+        //this.avatar = user.avatar_url
+        this.avatar = {photo: data.avatar}
+        data.avatar = null
+      }else{
+        this.avatar = {photo: 'images/avatar.png'}
+      }
       console.log(this.form, "forrmm")
       localStorage.user = JSON.stringify(data)
       this.$q.loading.hide()
