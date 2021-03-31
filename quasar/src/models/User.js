@@ -145,6 +145,24 @@ export class User {
     }
   }
 
+  static async savePhoto (payload) {
+    console.log("foi", payload)
+    try {
+      const url = payload.id ? `user-photos/${payload.id}` : 'user-photos'
+
+      const { status, data } = payload.id
+        ? await put(url, payload)
+        : await post(url, payload)
+      if (status >= 200 && status <= 300) {
+        return true
+      }
+      
+    } catch (e) {
+      console.log(e.response)
+      Notify.create({ type: 'negative', message: `User not created!` })
+      return e.response
+    }
+  }
 
   static async recoverRequest(payload) {
 

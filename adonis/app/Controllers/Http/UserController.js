@@ -80,6 +80,7 @@ class UserController {
       if (user){
         user = await User.query()
           .where("id", user.id)
+          .with('photos')
           .first();
 
         return response.send(user);

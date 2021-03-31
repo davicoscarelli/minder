@@ -12,16 +12,7 @@
   padding-bottom: 33%
   position: relative
  
-.image-container
-  width: 100px
-  height: 100px
-  border-radius: 5px
 
-.image-select
-  width: 100px
-  height: 100px
-  border: 1px solid grey
-  border-radius: 5px
 
 @media (max-width: $breakpoint-xs-max)
   .container 
@@ -95,19 +86,10 @@
               </div>
             </div>
 
-            <div class="col-12 col-md-6">
-              <label class="text-accent text-bold ajust" for="photos"
-                    >Profile Photos</label
-                  >
-
-              <div class="row">
-                <div v-for="img in form.photos" :key="img.id" class="image">
-                </div>
-                <div class="q-mt-sm image-select flex flex-center cursor-pointer">
-                  <q-icon name="add" size="26pt" color="grey"/>
-                </div>
-              </div>
-            </div>
+            <PhotoSelect
+              @change="changeFile"
+              :photos="form.photos"
+            />
             
             <div class="justify-center flex">
               <q-btn
@@ -195,6 +177,7 @@ export default {
     }
   },
   components: {
+    PhotoSelect: () => import('components/photos-select'),
     ImageCrop: () => import('components/image-crop'),
   },
   beforeMount() {
@@ -212,6 +195,9 @@ export default {
     
   },
   methods: {
+    changeFile() {
+      this.getUserData()
+    },
     async update() {
       this.loading = true
       console.log(this.form.images)
