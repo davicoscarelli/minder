@@ -12,6 +12,7 @@
         "axios": "^0.21.1",
         "core-js": "^3.6.5",
         "quasar": "^1.0.0",
+        "vue-advanced-cropper": "^0.17.9",
         "vue-i18n": "^8.0.0",
         "vue-tinder": "^2.0.3"
       },
@@ -3530,6 +3531,11 @@
         "node": ">=0.10.0"
       }
     },
+    "node_modules/classnames": {
+      "version": "2.2.6",
+      "resolved": "https://registry.npmjs.org/classnames/-/classnames-2.2.6.tgz",
+      "integrity": "sha512-JR/iSQOSt+LQIWwrwEzJ9uk0xfN3mTVYMwt1Ir5mUcSN6pU+V4zQFFaJsclJbPuAUQH+yfWef6tm7l1quW3C8Q=="
+    },
     "node_modules/clean-css": {
       "version": "4.2.3",
       "resolved": "https://registry.npmjs.org/clean-css/-/clean-css-4.2.3.tgz",
@@ -4607,6 +4613,11 @@
       "integrity": "sha1-sgOOhG3DO6pXlhKNCAS0VbjB4h0=",
       "dev": true
     },
+    "node_modules/debounce": {
+      "version": "1.2.1",
+      "resolved": "https://registry.npmjs.org/debounce/-/debounce-1.2.1.tgz",
+      "integrity": "sha512-XRRe6Glud4rd/ZGQfiV1ruXSfbvfJedlV9Y6zOlP+2K04vBYiJEte6stfFkCP03aMnY5tsipamumUjL14fofug=="
+    },
     "node_modules/debug": {
       "version": "4.3.1",
       "resolved": "https://registry.npmjs.org/debug/-/debug-4.3.1.tgz",
@@ -5054,6 +5065,11 @@
       "dependencies": {
         "safe-buffer": "~5.1.0"
       }
+    },
+    "node_modules/easy-bem": {
+      "version": "1.1.1",
+      "resolved": "https://registry.npmjs.org/easy-bem/-/easy-bem-1.1.1.tgz",
+      "integrity": "sha512-GJRqdiy2h+EXy6a8E6R+ubmqUM08BK0FWNq41k24fup6045biQ8NXxoXimiwegMQvFFV3t1emADdGNL1TlS61A=="
     },
     "node_modules/ee-first": {
       "version": "1.1.1",
@@ -14162,6 +14178,24 @@
       "resolved": "https://registry.npmjs.org/vue/-/vue-2.6.12.tgz",
       "integrity": "sha512-uhmLFETqPPNyuLLbsKz6ioJ4q7AZHzD8ZVFNATNyICSZouqP2Sz0rotWQC8UNBF6VGSCs5abnKJoStA6JbCbfg=="
     },
+    "node_modules/vue-advanced-cropper": {
+      "version": "0.17.9",
+      "resolved": "https://registry.npmjs.org/vue-advanced-cropper/-/vue-advanced-cropper-0.17.9.tgz",
+      "integrity": "sha512-lU5eHW1BKvwvHwHlG7ER/tP+gnlZH0LwQTVMtZa2U0dRtnbKfIp9Y2v9wnVwlxIRbsKUuGkJIpv60HS2pKrncA==",
+      "license": "MIT",
+      "dependencies": {
+        "classnames": "^2.2.6",
+        "debounce": "^1.2.0",
+        "easy-bem": "^1.0.2"
+      },
+      "engines": {
+        "node": ">=8",
+        "npm": ">=5"
+      },
+      "peerDependencies": {
+        "vue": "^2.6.6"
+      }
+    },
     "node_modules/vue-hot-reload-api": {
       "version": "2.3.4",
       "resolved": "https://registry.npmjs.org/vue-hot-reload-api/-/vue-hot-reload-api-2.3.4.tgz",
@@ -19304,6 +19338,11 @@
         }
       }
     },
+    "classnames": {
+      "version": "2.2.6",
+      "resolved": "https://registry.npmjs.org/classnames/-/classnames-2.2.6.tgz",
+      "integrity": "sha512-JR/iSQOSt+LQIWwrwEzJ9uk0xfN3mTVYMwt1Ir5mUcSN6pU+V4zQFFaJsclJbPuAUQH+yfWef6tm7l1quW3C8Q=="
+    },
     "clean-css": {
       "version": "4.2.3",
       "resolved": "https://registry.npmjs.org/clean-css/-/clean-css-4.2.3.tgz",
@@ -20198,6 +20237,11 @@
       "integrity": "sha1-sgOOhG3DO6pXlhKNCAS0VbjB4h0=",
       "dev": true
     },
+    "debounce": {
+      "version": "1.2.1",
+      "resolved": "https://registry.npmjs.org/debounce/-/debounce-1.2.1.tgz",
+      "integrity": "sha512-XRRe6Glud4rd/ZGQfiV1ruXSfbvfJedlV9Y6zOlP+2K04vBYiJEte6stfFkCP03aMnY5tsipamumUjL14fofug=="
+    },
     "debug": {
       "version": "4.3.1",
       "resolved": "https://registry.npmjs.org/debug/-/debug-4.3.1.tgz",
@@ -20585,6 +20629,11 @@
           }
         }
       }
+    },
+    "easy-bem": {
+      "version": "1.1.1",
+      "resolved": "https://registry.npmjs.org/easy-bem/-/easy-bem-1.1.1.tgz",
+      "integrity": "sha512-GJRqdiy2h+EXy6a8E6R+ubmqUM08BK0FWNq41k24fup6045biQ8NXxoXimiwegMQvFFV3t1emADdGNL1TlS61A=="
     },
     "ee-first": {
       "version": "1.1.1",
@@ -27954,6 +28003,16 @@
       "version": "2.6.12",
       "resolved": "https://registry.npmjs.org/vue/-/vue-2.6.12.tgz",
       "integrity": "sha512-uhmLFETqPPNyuLLbsKz6ioJ4q7AZHzD8ZVFNATNyICSZouqP2Sz0rotWQC8UNBF6VGSCs5abnKJoStA6JbCbfg=="
+    },
+    "vue-advanced-cropper": {
+      "version": "0.17.9",
+      "resolved": "https://registry.npmjs.org/vue-advanced-cropper/-/vue-advanced-cropper-0.17.9.tgz",
+      "integrity": "sha512-lU5eHW1BKvwvHwHlG7ER/tP+gnlZH0LwQTVMtZa2U0dRtnbKfIp9Y2v9wnVwlxIRbsKUuGkJIpv60HS2pKrncA==",
+      "requires": {
+        "classnames": "^2.2.6",
+        "debounce": "^1.2.0",
+        "easy-bem": "^1.0.2"
+      }
     },
     "vue-hot-reload-api": {
       "version": "2.3.4",

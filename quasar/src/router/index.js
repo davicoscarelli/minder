@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import Auth from './middleware/Auth'
+import Meta from './middleware/Meta'
 
 import routes from './routes'
 
@@ -26,5 +28,16 @@ export default function (/* { store, ssrContext } */) {
     base: process.env.VUE_ROUTER_BASE
   })
 
+  Router.beforeEach(
+    async (to, from, next) => await Auth.AuthMiddleware(to, from, next)
+  )
+  Router.afterEach(to => Meta.metaMeddleware(to))
+
   return Router
 }
+
+
+
+
+  
+

@@ -25,11 +25,47 @@ class UserController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response, view }) {
-    response.send("vrau")
-  }
+  async index ({ request, response, auth }) {
+    try {
+      const loggedUser = await auth.getUser();
+      
+      let blackList = [loggedUser.id].concat(loggedUser.likes, loggedUser.dislikes).filter(Number)
+      
+      console.log(blackList)
 
-  
+      const users = await User.query()
+        .whereNotIn("id", blackList)
+        .with("photos")
+        .paginate()
+      
+      return response.send(users);
+    
+    } catch (error) {
+      console.log(error)
+    }
+
+    }
+    
+    async like ({ request, response, view }) {
+
+    }
+    
+    async dislike ({ request, response, auth }) {
+      const loggedUser = await auth.getUser();
+      
+      const targetUser = await User.findBy("id", request.input("target_user"));
+
+      if (!targetUser) {
+        return response.send('User do not exists');
+      }
+
+      loggedUser.dislikes.push(targetUser.id);
+
+      await loggedUser.save();
+
+      return response.send(users);
+        
+    }
 
   /**
    * Render a form to be used for creating a new user.
@@ -116,6 +152,8 @@ class UserController {
       const allRequest = request.all();
 
       let avatar_url =  ''
+
+      let slash = "\\"
       
       const loggedUser = await auth.getUser();
 
@@ -124,26 +162,25 @@ class UserController {
       const userToUpdate = await User.find(user.id);
 
       const avatar = request.input("avatar");
-      console.log(avatar, "AVATRA")
       if (avatar && avatar.size != undefined) {
 
           var image = avatar.photo;
           const path = Helpers.publicPath("tmp");
           const fileName = new Date().getTime() + ".png";
           let base64Image = image.split(";base64,").pop();
-          const fileSave = `${path}/${fileName}`;
+          const fileSave = `${path}${slash}${fileName}`;
           await fs.writeFileSync(fileSave, base64Image, { encoding: "base64" });
           const newPath = await StorageUser.save(loggedUser, fileName);
           const baseUrl = Env.get("APP_ENDPOINT");
-          avatar_url =  `${baseUrl}/user_storage/${newPath}`;
+          avatar_url =  `${baseUrl}${slash}user_storage${slash}${newPath}`;
           user.avatar = avatar_url;
 
           let userCurrentAvatar = loggedUser.avatar;
           if (userCurrentAvatar != null ) {
-            const start = userCurrentAvatar.indexOf('/user_storage');
+            const start = userCurrentAvatar.indexOf('${slash}user_storage');
             const end = userCurrentAvatar.length;
             userCurrentAvatar = userCurrentAvatar.substring(start, end);
-            StorageUser.removeFile(`./public${userCurrentAvatar}`);
+            StorageUser.removeFile(`.${slash}public${userCurrentAvatar}`);
             
           } 
         

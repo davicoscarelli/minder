@@ -4,8 +4,11 @@
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 const StorageUser = use("App/Services/StorageUser");
+const FileService = use("App/Services/AttachmentService");
 const Helpers = use("Helpers");
 const Env = use("Env");
+
+const slash = "\\";
 
 const Database = use("Database");
 const UserPhotos = use("App/Models/UserPhotos");
@@ -53,16 +56,16 @@ class UserPhotoController {
     try {
       let newPhoto = request.all()
       let user = await auth.getUser()
-      
+  
       let image = newPhoto.base;
       const path = Helpers.publicPath("tmp");
       const fileName = new Date().getTime() + ".png";
       let base64Image = image.split(";base64,").pop();
-      const fileSave = `${path}/${fileName}`;
+      const fileSave = `${path}${slash}${fileName}`;
       await fs.writeFileSync(fileSave, base64Image, { encoding: "base64" });
       const newPath = await StorageUser.save(user, fileName);
       const baseUrl = Env.get("APP_ENDPOINT");
-      let url =  `${baseUrl}/user_storage/${newPath}`;
+      let url =  `${baseUrl}${slash}user_storage${slash}${newPath}`;
       console.log(url, user.id)
       
       await UserPhotos.create({user_id: user.id, url: url});
@@ -108,6 +111,36 @@ class UserPhotoController {
    * @param {Response} ctx.response
    */
   async update ({ params, request, response }) {
+    console.log(request.all())
+    if (request.input("delete") === true){
+      try {
+        const photo = await UserPhotos.query().where('id', request.input("id")).first();
+  
+        let fetched = photo.toJSON()
+        console.log(fetched)
+  
+        const start = fetched.url.indexOf(`${slash}user_storage`);
+        const end = fetched.url.length;
+        let url = fetched.url.substring(start, end);
+        console.log("PATH", url)
+  
+        FileService.removeFile(`.${slash}public${url}`);
+        await UserPhotos.query()
+          .where('id', fetched.id)
+          .delete()
+  
+        console.log('deleted', fetched.url)
+  
+        return response.status(204).send();
+      } catch (e) {
+        console.log(e)
+        return response.status(400).send();
+      }  
+    
+    
+    }
+    
+  
   }
 
   /**
@@ -118,7 +151,34 @@ class UserPhotoController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy ({ params, request, response }) {
+   async destroy({ params: { id }, response }) {
+    try {
+      const photo = await UserPhotos.query().where('id', id).with('attachments').first();
+
+      let fetched = classes.toJSON()
+
+      fetched.attachments.map(async(attachment)=>{
+        
+        const start = attachment.url.indexOf('/storage_user');
+        const end = attachment.url.length;
+        attachment.url = attachment.url.substring(start, end);
+
+        AttachmentService.removeAttachment(`./public${attachment.url}`);
+        await classes
+          .attachments()
+          .where('id', attachment.id)
+          .delete()
+
+        console.log('deleted', attachment.title)
+
+      })
+      classes.status = 0;
+      await classes.save();
+      return response.status(204).send();
+    } catch (e) {
+      console.log(e)
+      return response.status(400).send();
+    }
   }
 }
 

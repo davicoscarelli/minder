@@ -19,6 +19,8 @@ const Route = use('Route')
 Route.on('/').render('welcome')
 
 Route.resource("clients", "UserController").apiOnly();
+Route.resource("dislike", "UserController.dislike").as("dislike");
+
 Route.resource("user-photos", "UserPhotoController").apiOnly();
 Route.get("myaccount", "UserController.show").as("myaccount");
 

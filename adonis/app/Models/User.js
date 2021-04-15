@@ -6,6 +6,9 @@ const Hash = use('Hash')
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Model = use('Model')
 
+
+const Env = use("Env");
+
 class User extends Model {
   static boot () {
     super.boot()
@@ -22,7 +25,7 @@ class User extends Model {
   }
 
   static get hidden() {
-    return ["password"];
+    return ["password", "likes", "dislikes"];
   }
 
   static get fillable() {
@@ -31,7 +34,8 @@ class User extends Model {
       "avatar",
       "email",
       "password",
-      
+      "likes",
+      "dislikes"
     ];
   }
   static get computed() {

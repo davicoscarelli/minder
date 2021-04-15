@@ -155,6 +155,7 @@
 
 <script>
 import { User } from 'src/models/User'
+import { Notify } from 'quasar'
 
 export default {
   name: 'myaccount-page',
@@ -163,11 +164,12 @@ export default {
     error: false,
     success: false,
     form: {
-      photos: {
+      photos: [{
         id: 0,
         user_id: 0,
         url: '',
-    }},
+      }]
+    },
     avatar: {}
   }),
   computed: {
@@ -212,10 +214,7 @@ export default {
       this.avatar = photo
       this.form.avatar_url = null
       this.avatarchanged = true
-      Notify.create({
-            type: 'warning',
-            message: `Clique em Atualizar para validar a alteração da sua imagem!`
-          })
+      this.update()
       },
 
      async getUserData() {

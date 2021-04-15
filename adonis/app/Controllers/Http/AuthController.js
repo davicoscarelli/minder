@@ -24,21 +24,24 @@ class AuthController {
    */
   async login({ request, response, auth }) {
     try {
+      console.log(request.all())
       
       const { email, password } = request.all();
       const user = await User.query().where("email", email).first();
       if (user.id){
         const tokens = await auth.withRefreshToken().attempt(email, password);
+        console.log("tudo ok", user)
       
         return response.send({ tokens, user });
         
       }else{
+        console.log("tudo n ok")
         return response.status(400).send("invalidCredentials");
       }
 
       
     } catch (error) {
-      // console.log(error);
+      console.log(error);
       return response.status(400).send("invalidCredentials");
     }
   }

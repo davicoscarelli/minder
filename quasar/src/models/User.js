@@ -33,6 +33,7 @@ export class User {
 
     try {
       const { data, status } = await post('auth/login', credencials)
+      console.log(credencials)
       if (status === 200) {
           localStorage.user = JSON.stringify(data.user)
           localStorage.setItem('access_token', data.tokens.token)
@@ -42,8 +43,8 @@ export class User {
         return true
       }
     } catch (e) {
-        console.log(e)
-        Notify.create({
+        console.log(e, "AAAAAAAA")
+        Notify.create({ 
           type: 'negative',
           message: `Login or password incorrect!`
         })
@@ -124,7 +125,7 @@ export class User {
       
     } catch (e) {
       Notify.create({ type: 'negative', message: `User not created!` })
-      return e.response
+      return e
     }
   }
 

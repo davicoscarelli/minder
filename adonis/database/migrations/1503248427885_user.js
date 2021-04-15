@@ -12,6 +12,8 @@ class UserSchema extends Schema {
       table.string('password', 60).notNullable()
       table.text("avatar")
       table.text("folder")
+      table.text("likes")
+      table.text("dislikes")
       table.timestamps()
     })
   }

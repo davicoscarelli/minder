@@ -143,19 +143,19 @@ export default {
       }
       reader.readAsDataURL(file)
     },
-    invalid(type) {
-      const message =
-        type === 'v'
-          ? this.$t('general.invalidTypeImage')
-          : this.$t('general.invalidSize')
+    // invalid(type) {
+    //   const message =
+    //     type === 'v'
+    //       ? this.$t('general.invalidTypeImage')
+    //       : this.$t('general.invalidSize')
 
-      this.$q.notify({
-        message: message,
-        type: 'negative',
-        timer: 2500,
-        position: 'bottom'
-      })
-    },
+    //   Notify.create({
+    //     message: message,
+    //     type: 'negative',
+    //     timer: 2500,
+    //     position: 'bottom'
+    //   })
+    // },
     
   },
   comments: {

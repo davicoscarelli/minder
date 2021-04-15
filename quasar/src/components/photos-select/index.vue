@@ -3,12 +3,13 @@
       <label class="text-accent text-bold ajust" for="photos">Profile Photos</label>
 
       <div class="row justify-center q-mt-sm q-gutter-md">
-        <div v-for="img in photos" :key="img.id" class=" q-mt-sm image-select flex flex-center cursor-pointer" @click="deleteItem(img)">
+        <div v-for="img in photos" :key="img.id" class=" q-mt-sm image-select flex  cursor-pointer" @click="deleteItem(img)">
           <!-- {{img.title}} -->
           <q-img
             :ratio="1"
             :src="img.url"
           />
+          <q-icon name="delete" class="q-ma-sm" size="16pt" color="red" style="position: absolute; opacity: 0.8"/>
         </div>
         <div v-if="photos.length < 6" class="q-mt-sm image-select flex flex-center cursor-pointer" @click="$refs.file.$el.click()">
           <q-icon name="add" size="26pt" color="grey"/>
@@ -227,13 +228,26 @@ export default {
   },
   data: () => ({
     loading: false,
-    form: {photos: {}},
+    form: {photos: []},
   }),
   methods: {
     
     
-    deleteItem(img){
-      this.files.splice(this.files.indexOf(img), 1)
+    async deleteItem(img){
+      // this.files.splice(this.files.indexOf(img), 1)
+      this.$q.loading.show({
+          //spinner: QSpinnerFacebook,
+          spinnerColor: 'white',
+          thickness:"10",
+          spinnerSize: 140,
+          backgroundColor: 'primary',
+          messageColor: 'white'
+        })
+      let success = await User.savePhoto({id: img.id, delete: true})
+      if (success){
+        this.$emit('change')
+        this.$q.loading.hide()
+      }
     },
 
     convert(file) {
@@ -242,10 +256,19 @@ export default {
         reader.readAsDataURL(file);
         reader.onload = () => resolve(reader.result);
         reader.onerror = error => reject(error);
+        this.$q.loading.show({
+          //spinner: QSpinnerFacebook,
+          spinnerColor: 'white',
+          thickness:"10",
+          spinnerSize: 140,
+          backgroundColor: 'primary',
+          messageColor: 'white'
+        })
       })
       promise.then(async (base) => {
         await User.savePhoto({base: base})
         this.$emit('change')
+        this.$q.loading.hide()
       })
      
     },
