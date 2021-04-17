@@ -1,7 +1,7 @@
 <template>
   <q-page class="flex flex-center">
     <div id="app">
-      <VueTinder  ref="tinder" key-name="id" :queue.sync="queue" :offset-y="10" @submit="onSubmit">
+      <VueTinder v-if="queue.length > 0" ref="tinder" key-name="id" :queue.sync="queue" :offset-y="10" @submit="onSubmit">
         <template slot-scope="scope" class="">
           
           <div class=" text-container">
@@ -33,11 +33,33 @@
         <img class="super-pointer" slot="super" src="../assets/super-txt.png">
         <img class="rewind-pointer" slot="rewind" src="../assets/rewind-txt.png">
       </VueTinder>
-      <div class="btns">
+      <div class="btns" v-if="queue.length > 0">
         <img src="../assets/rewind.png" @click="decide('rewind')">
         <img src="../assets/nope.png" @click="decide('nope')">
         <img src="../assets/super-like.png" @click="decide('super')">
         <img src="../assets/like.png" @click="decide('like')">
+      </div>
+
+      <div class="row flex flex-center">
+        <div class="flex-center flex col-12">
+        <q-icon class="flex-center" size="10em" color="grey-6" name="mdi-heart-broken" />
+        </div>
+        <div class="col-12 text-center">
+          <label style="font-size: 18pt" class="text-grey-6">Nobody found...</label>
+        </div>
+        <div class="col-12 text-center q-py-md">
+          <q-btn
+            label="Search for more"
+            size="15px"
+            outline
+            color="grey-6"
+            class="text-bold"
+            style="width: 150px; font-size: 12pt"
+            no-caps
+            rounded
+            @click="getQueue"
+          />
+        </div>
       </div>
 
     </div>
@@ -77,6 +99,7 @@ export default {
 
       // "https://instagram.fbvb2-1.fna.fbcdn.net/v/t51.2885-15/e35/150472018_722140988494711_4586550391134516284_n.jpg?tp=1&_nc_ht=instagram.fbvb2-1.fna.fbcdn.net&_nc_cat=107&_nc_ohc=7q7DsGX4lL4AX9tIylw&ccb=7-4&oh=355333cfd2e0f254309df581c039b0be&oe=6083D7BB&_nc_sid=83d603"
       this.queue = data.data
+      console.log(this.queue, "QUEUE")
     },
     async onSubmit({ item, type }) {
       console.log(type)
