@@ -29,44 +29,115 @@ class UserController {
     try {
       const loggedUser = await auth.getUser();
       
-      let blackList = [loggedUser.id].concat(loggedUser.likes, loggedUser.dislikes).filter(Number)
+      let blackList = [loggedUser.id].concat(JSON.parse(loggedUser.likes), JSON.parse(loggedUser.dislikes)).filter(Number)
       
-      console.log(blackList)
-
       const users = await User.query()
         .whereNotIn("id", blackList)
         .with("photos")
         .paginate()
       
-      return response.send(users);
+      let allUsers = users.toJSON()
+      console.log("TEM GENTE", allUsers.data.length)
+      if (allUsers.data.length == 0){
+        loggedUser.dislikes = JSON.stringify([])
+        await loggedUser.save();
+        blackList = [loggedUser.id].concat(JSON.parse(loggedUser.likes)).filter(Number)
+      
+
+        const newUsers = await User.query()
+        .whereNotIn("id", blackList)
+        .with("photos")
+        .paginate()
+        
+        return response.send(newUsers);
+      }else{
+        
+        return response.send(allUsers);
+
+      }
+      
     
     } catch (error) {
       console.log(error)
     }
 
     }
-    
-    async like ({ request, response, view }) {
 
+    
+    async like({ request, response, auth }) {
+      try {
+        const loggedUser = await auth.getUser();
+        console.log("LIKEEE", request.all(), loggedUser)
+        
+        const targetUser = await User.findBy("id", request.input("target_user"));
+      
+        if (!targetUser) {
+          return response.status(404).send('User do not exists');
+        }
+
+        if (loggedUser.likes && loggedUser.likes.length > 0){
+          let likes = JSON.parse(loggedUser.likes)
+          likes.push(targetUser.id);
+          loggedUser.likes = JSON.stringify(likes)
+        }else{
+          loggedUser.likes = JSON.stringify([targetUser.id]);
+          
+        }
+
+
+        
+        if (targetUser.likes.includes(loggedUser.id)) {
+ 
+          let userMatches = [targetUser.id].concat(JSON.parse(loggedUser.matchs))
+          let targetMatches = [loggedUser.id].concat(JSON.parse(targetUser.matchs))
+          console.log("MATCHH user", userMatches)
+          console.log("MATCHH tarrget", targetMatches)
+          loggedUser.matchs = JSON.stringify(userMatches)
+          targetUser.matchs = JSON.stringify(targetMatches)
+          await targetUser.save();
+          await loggedUser.save();
+          return response.send({user: loggedUser.toJSON(), target: targetUser.toJSON()});  
+        }else{
+          await loggedUser.save();
+          return response.send(loggedUser.toJSON());
+        }
+        
+      } catch (error) {
+        console.log(error)
+      }
+      
     }
     
     async dislike ({ request, response, auth }) {
+
       const loggedUser = await auth.getUser();
       
+      
       const targetUser = await User.findBy("id", request.input("target_user"));
-
+    
       if (!targetUser) {
         return response.send('User do not exists');
       }
-
-      loggedUser.dislikes.push(targetUser.id);
+      if (loggedUser.dislikes && loggedUser.dislikes.length > 0){
+        let dislikes = JSON.parse(loggedUser.dislikes)
+        dislikes.push(targetUser.id);
+        loggedUser.dislikes = JSON.stringify(dislikes)
+      }else{
+        loggedUser.dislikes = JSON.stringify([targetUser.id]);
+      }
 
       await loggedUser.save();
 
-      return response.send(users);
+      return response.send(loggedUser.toJSON());
         
     }
 
+    async getMatches({ response, auth }){
+      const loggedUser = await auth.getUser();
+      
+      return response.send(JSON.parse(loggedUser.matchs));
+    }
+    
   /**
    * Render a form to be used for creating a new user.
    * GET users/create
@@ -90,7 +161,6 @@ class UserController {
   async store ({ request, response }) {
     try {
       let newUser = request.all()
-      console.log(newUser)    
       const user = await User.create(newUser);
 
       return response.status(201).send(user);
@@ -111,6 +181,7 @@ class UserController {
    * @param {View} ctx.view
    */
    async show({ response, auth }) {
+
     try {
       let user = await auth.getUser();
       if (user){
@@ -158,7 +229,7 @@ class UserController {
       const loggedUser = await auth.getUser();
 
       const user = ModelHelper.fillable(allRequest, [...User.fillable, "id"]);
-      console.log(user)
+      
       const userToUpdate = await User.find(user.id);
 
       const avatar = request.input("avatar");
@@ -193,8 +264,7 @@ class UserController {
       
 
       const userUpdated = await User.find(user.id);
-      console.log(userUpdated)
-
+      
       return response.status(201).send(userUpdated);
 
     }catch(e){

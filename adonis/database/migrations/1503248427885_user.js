@@ -14,6 +14,7 @@ class UserSchema extends Schema {
       table.text("folder")
       table.text("likes")
       table.text("dislikes")
+      table.text("matchs")
       table.timestamps()
     })
   }

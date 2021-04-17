@@ -8,10 +8,10 @@
             <div class="col-12 ">
               <div class="row ">
                 <p style="font-size: 20pt" class="text-white text-bold q-mb-none">{{scope.data.name}}</p>
-                <p style="font-size: 18pt" class="text-white q-ml-sm q-mb-none">{{scope.data.age}}</p>
+                <!-- <p style="font-size: 18pt" class="text-white q-ml-sm q-mb-none">{{scope.data.age}}</p> -->
               </div>
               <div class="row">
-                <p style="font-size: 14pt" class="text-white">{{scope.data.bio}}</p>
+                <!-- <p style="font-size: 14pt" class="text-white">{{scope.data.bio}}</p> -->
               </div>
             </div>
           </div>
@@ -19,7 +19,7 @@
           <div
             class="pic"
             :style="{
-              'background-image': `url(${scope.data.images[0]})`
+              'background-image': `url(${scope.data.photos.length > 0 ? scope.data.photos[0] : 'https://instagram.fbvb2-1.fna.fbcdn.net/v/t51.2885-15/e35/150472018_722140988494711_4586550391134516284_n.jpg?tp=1&_nc_ht=instagram.fbvb2-1.fna.fbcdn.net&_nc_cat=107&_nc_ohc=7q7DsGX4lL4AX9tIylw&ccb=7-4&oh=355333cfd2e0f254309df581c039b0be&oe=6083D7BB&_nc_sid=83d603'})`
             }"
             @click="open()"
           />
@@ -72,42 +72,22 @@ export default {
       console.log("vrau")
     },
     async getQueue() {
-      let list = [
-        {
-          id: 0,
-          name: "Davi Coscarelli",
-          bio: "Nothing to declare",
-          age: "19",
-          city: "Boa Vista",
-          images: ["https://instagram.fbvb2-1.fna.fbcdn.net/v/t51.2885-15/e35/150472018_722140988494711_4586550391134516284_n.jpg?tp=1&_nc_ht=instagram.fbvb2-1.fna.fbcdn.net&_nc_cat=107&_nc_ohc=7q7DsGX4lL4AX9tIylw&ccb=7-4&oh=355333cfd2e0f254309df581c039b0be&oe=6083D7BB&_nc_sid=83d603"]
-        },
-        {
-          id: 1,
-          name: "Felipe Bandeira",
-          bio: "Nothing to declare",
-          age: "22",
-          city: "Recife",
-          images: ["https://images.unsplash.com/photo-1503443207922-dff7d543fd0e?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MXx8bWVufGVufDB8fDB8&ixlib=rb-1.2.1&w=1000&q=80"]
-        },
-        {
-          id: 2,
-          name: "Zoey",
-          bio: "Nothing to declare",
-          age: "20",
-          city: "No Idea",
-          images: ["https://images.unsplash.com/photo-1536063211352-0b94219f6212?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MXx8YmVhdXRpZnVsJTIwZ2lybHxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&w=1000&q=80"]
-        },
-      ]
+      const { data } = await this.$http.get('clients')
+      console.log("aaaaa", data)
 
-      this.queue = list
+      // "https://instagram.fbvb2-1.fna.fbcdn.net/v/t51.2885-15/e35/150472018_722140988494711_4586550391134516284_n.jpg?tp=1&_nc_ht=instagram.fbvb2-1.fna.fbcdn.net&_nc_cat=107&_nc_ohc=7q7DsGX4lL4AX9tIylw&ccb=7-4&oh=355333cfd2e0f254309df581c039b0be&oe=6083D7BB&_nc_sid=83d603"
+      this.queue = data.data
     },
-    onSubmit({ item }) {
+    async onSubmit({ item, type }) {
+      console.log(type)
       if (this.queue.length === 0) {
         // this.getQueue();
       }
+      await User.decide(item, type)
       this.history.push(item);
     },
     async decide(choice) {
+      console.log(choice)
       if (choice === "rewind") {
         if (this.history.length) {
           this.$refs.tinder.rewind([this.history.pop()]);

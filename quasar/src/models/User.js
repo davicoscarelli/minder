@@ -53,6 +53,35 @@ export class User {
     }
   }
 
+  static async decide (item, type) {
+    let url = 'clients'
+
+    if(type == "like"){
+      url = url + '/like'
+    }else if (type == "nope"){
+      url = url + '/dislike'
+    }
+    try {
+      const { data, status } = await post(url, {target_user: item.id})
+      if (status === 200) {
+          let user = localStorage.getItem("user")
+          if (data.target && (user.matchs != data.target.matchs)){
+            Notify.create({ type: 'positive', message: `Match with ${data.target.name}!` })
+            localStorage.user = JSON.stringify(data.user)
+          }else{
+            localStorage.user = JSON.stringify(data)
+          }
+          
+          
+          return true
+      }
+    } catch (e) {
+        console.log(e, "AAAAAAAA")
+        return false
+      
+    }
+  }
+
   static async logout () {
     try {
       await post('auth/logout')

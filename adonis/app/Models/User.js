@@ -25,7 +25,7 @@ class User extends Model {
   }
 
   static get hidden() {
-    return ["password", "likes", "dislikes"];
+    return ["password"];
   }
 
   static get fillable() {
@@ -35,7 +35,8 @@ class User extends Model {
       "email",
       "password",
       "likes",
-      "dislikes"
+      "dislikes",
+      "matchs"
     ];
   }
   static get computed() {
@@ -48,6 +49,8 @@ class User extends Model {
     const baseUrl = Env.get("APP_ENDPOINT");
     return `${baseUrl}/user_storage/${avatar}`;
   }
+
+  
 
   /**
    * A relationship on tokens is required for auth to
