@@ -36,7 +36,7 @@ class User extends Model {
       "password",
       "likes",
       "dislikes",
-      "matchs"
+      "matches"
     ];
   }
   static get computed() {

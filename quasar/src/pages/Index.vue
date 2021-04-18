@@ -30,13 +30,13 @@
         </template>
         <img class="like-pointer" slot="like" src="../assets/like-txt.png">
         <img class="nope-pointer" slot="nope" src="../assets/nope-txt.png">
-        <img class="super-pointer" slot="super" src="../assets/super-txt.png">
-        <img class="rewind-pointer" slot="rewind" src="../assets/rewind-txt.png">
+        <!-- <img class="super-pointer" slot="super" src="../assets/super-txt.png">
+        <img class="rewind-pointer" slot="rewind" src="../assets/rewind-txt.png"> -->
       </VueTinder>
       <div class="btns" v-if="queue.length > 0">
-        <img src="../assets/rewind.png" @click="decide('rewind')">
+        <!-- <img src="../assets/rewind.png" @click="decide('rewind')"> -->
         <img src="../assets/nope.png" @click="decide('nope')">
-        <img src="../assets/super-like.png" @click="decide('super')">
+        <!-- <img src="../assets/super-like.png" @click="decide('super')"> -->
         <img src="../assets/like.png" @click="decide('like')">
       </div>
 

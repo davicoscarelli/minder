@@ -9,11 +9,17 @@ export class User {
     localStorage.removeItem('access_token')
     localStorage.removeItem('refresh_token')
     localStorage.removeItem('user')
+    localStorage.removeItem('matches')
+    localStorage.removeItem('theme')
     // localStorage.removeItem('address')
     // localStorage.removeItem('info')
 
     axios.defaults.headers.Authorization = ''
     this.loggedUser = undefined
+    for(let i=0; i<100; i++)
+    {
+      window.clearTimeout(i);
+    }
     return true
   }
 
@@ -38,6 +44,7 @@ export class User {
           localStorage.user = JSON.stringify(data.user)
           localStorage.setItem('access_token', data.tokens.token)
           localStorage.setItem('refresh_token', data.tokens.refreshToken)
+          localStorage.setItem('matches', JSON.stringify(data.matchesUsers))
         
         Notify.create({ type: 'positive', message: `Welcome!` })
         return true
@@ -53,6 +60,34 @@ export class User {
     }
   }
 
+  static async getMatches(){
+    try {
+      if (this.isAuthenticated){
+        const { data, status } = await get('/matches')
+        if (status === 200) {
+            let user = localStorage.getItem("user")
+            user = JSON.parse(user)
+            
+            // console.log(JSON.stringify(data.matches), user.matches)
+            if (user.matches != JSON.stringify(data.matches)){
+              Notify.create({ type: 'positive', message: `Match with ${data.matchesUsers[data.matchesUsers.length - 1].name}!` })
+              localStorage.user = JSON.stringify({...user, matches: JSON.stringify(data.matches)})
+              localStorage.matches = JSON.stringify(data.matchesUsers)
+            }else{
+              localStorage.matches = JSON.stringify(data.matchesUsers)
+            }
+          
+            return data.matchesUsers
+        }
+      }
+    } catch (e) {
+        console.log(e, "AAAAAAAA")
+        return false
+      
+    }
+
+  }
+
   static async decide (item, type) {
     let url = 'clients'
 
@@ -65,9 +100,10 @@ export class User {
       const { data, status } = await post(url, {target_user: item.id})
       if (status === 200) {
           let user = localStorage.getItem("user")
-          if (data.target && (user.matchs != data.target.matchs)){
+          if (data.target && (user.matches != data.target.matches)){
             Notify.create({ type: 'positive', message: `Match with ${data.target.name}!` })
             localStorage.user = JSON.stringify(data.user)
+            localStorage.matches = JSON.stringify(data.matchesUsers)
           }else{
             localStorage.user = JSON.stringify(data)
           }

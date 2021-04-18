@@ -30,9 +30,13 @@ class AuthController {
       const user = await User.query().where("email", email).first();
       if (user.id){
         const tokens = await auth.withRefreshToken().attempt(email, password);
-        console.log("tudo ok", user)
+
+        let matches = JSON.parse(user.matches)
+        let matchesUsers = await User.query().whereIn('id', matches).with('photos').fetch()
+
+        console.log("tudo ok", matchesUsers.toJSON())
       
-        return response.send({ tokens, user });
+        return response.send({ tokens, user, matchesUsers });
         
       }else{
         console.log("tudo n ok")

@@ -19,7 +19,7 @@
     padding-bottom: 100%
 
 .iframe 
-  display:block
+  display: block
   position: absolute
   top: 0
   left: 0

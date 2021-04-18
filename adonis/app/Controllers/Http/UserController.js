@@ -88,15 +88,20 @@ class UserController {
         
         if (targetUser.likes.includes(loggedUser.id)) {
  
-          let userMatches = [targetUser.id].concat(JSON.parse(loggedUser.matchs))
-          let targetMatches = [loggedUser.id].concat(JSON.parse(targetUser.matchs))
+          let userMatches = [targetUser.id].concat(JSON.parse(loggedUser.matches))
+          let targetMatches = [loggedUser.id].concat(JSON.parse(targetUser.matches))
           console.log("MATCHH user", userMatches)
           console.log("MATCHH tarrget", targetMatches)
-          loggedUser.matchs = JSON.stringify(userMatches)
-          targetUser.matchs = JSON.stringify(targetMatches)
+          loggedUser.matches = JSON.stringify(userMatches)
+          targetUser.matches = JSON.stringify(targetMatches)
           await targetUser.save();
           await loggedUser.save();
-          return response.send({user: loggedUser.toJSON(), target: targetUser.toJSON()});  
+
+          let matches = JSON.parse(userMatches)
+
+          let matchesUsers = await User.query().whereIn('id', matches).with('photos').fetch()
+
+          return response.send({user: loggedUser.toJSON(), target: targetUser.toJSON(), matchesUsers: matchesUsers});  
         }else{
           await loggedUser.save();
           return response.send(loggedUser.toJSON());
@@ -133,9 +138,24 @@ class UserController {
     }
 
     async getMatches({ response, auth }){
-      const loggedUser = await auth.getUser();
+      try {
+        const loggedUser = await auth.getUser();
+        let matches = JSON.parse(loggedUser.matches)
+
+        let matchesUsers = await User.query().whereIn('id', matches).with('photos').fetch()
+
+        let allmatches = matchesUsers.toJSON()
+        allmatches.map((match) => {
+          match.photos.map((photo)=>{
+            photo.name = match.photos.indexOf(photo)
+          })
+        })
+
+        return response.send({matches: matches, matchesUsers: allmatches});  
+      } catch (error) {
+        console.log(error)
+      }
       
-      return response.send(JSON.parse(loggedUser.matchs));
     }
     
   /**

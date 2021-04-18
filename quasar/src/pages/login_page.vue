@@ -146,6 +146,9 @@ export default {
     verifyAccount: false,
     isPwd: true,
   }),
+  created(){
+      this.$q.dark.set(false)
+  },
   methods: {
     async login() {
       const success = await new User().login(this.form)
