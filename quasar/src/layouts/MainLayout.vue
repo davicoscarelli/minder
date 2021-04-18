@@ -80,7 +80,7 @@
       
     </q-drawer>
 
-    <UserPage :userInfo="match" :openUserPage.sync="openUserPage" @closeUserPage="val => openUserPage = val"/>
+    <UserPage :userInfo="match" :match="true" :openUserPage.sync="openUserPage" @closeUserPage="val => openUserPage = val"/>
 
     <q-drawer
       side="right"
@@ -91,7 +91,7 @@
       :content-class="`${$q.dark.isActive ? 'bg-black-4' : 'bg-grey-1'} text-center`"
     >
       <q-avatar
-          class="q-my-md text-bold shadow-8 cursor-pointer"
+          class="q-my-md text-bold shadow-8"
           size="80px"
           text-color="white"
         >

@@ -244,7 +244,7 @@ class UserController {
 
       let avatar_url =  ''
 
-      let slash = "\\"
+      let slash = "/"
       
       const loggedUser = await auth.getUser();
 

@@ -1,33 +1,33 @@
 <template>
   <q-page class="flex flex-center">
     <div id="app">
-      <VueTinder v-if="queue.length > 0" ref="tinder" key-name="id" :queue.sync="queue" :offset-y="10" @submit="onSubmit">
-        <template slot-scope="scope" class="">
+      <VueTinder v-if="queue.length > 0" ref="tinder" key-name="id" :queue.sync="queue" :offset-y="10" @submit="onSubmit" :allowSuper="false">
+        
+        <template slot-scope="scope">
           
-          <div class=" text-container">
+          <div class=" text-container"  @click="openUser(scope.data)">
             <div class="col-12 ">
               <div class="row ">
                 <p style="font-size: 20pt" class="text-white text-bold q-mb-none">{{scope.data.name}}</p>
-                <!-- <p style="font-size: 18pt" class="text-white q-ml-sm q-mb-none">{{scope.data.age}}</p> -->
+                <p style="font-size: 18pt" class="text-white q-ml-sm q-mb-none">{{scope.data.age}}</p>
               </div>
               <div class="row">
                 <!-- <p style="font-size: 14pt" class="text-white">{{scope.data.bio}}</p> -->
               </div>
             </div>
           </div>
-
           <div
             class="pic"
             :style="{
               'background-image': `url(${scope.data.photos.length > 0 ? scope.data.photos[0] : 'https://instagram.fbvb2-1.fna.fbcdn.net/v/t51.2885-15/e35/150472018_722140988494711_4586550391134516284_n.jpg?tp=1&_nc_ht=instagram.fbvb2-1.fna.fbcdn.net&_nc_cat=107&_nc_ohc=7q7DsGX4lL4AX9tIylw&ccb=7-4&oh=355333cfd2e0f254309df581c039b0be&oe=6083D7BB&_nc_sid=83d603'})`
             }"
-            @click="open()"
           />
           
           
           
           
         </template>
+        
         <img class="like-pointer" slot="like" src="../assets/like-txt.png">
         <img class="nope-pointer" slot="nope" src="../assets/nope-txt.png">
         <!-- <img class="super-pointer" slot="super" src="../assets/super-txt.png">
@@ -39,6 +39,10 @@
         <!-- <img src="../assets/super-like.png" @click="decide('super')"> -->
         <img src="../assets/like.png" @click="decide('like')">
       </div>
+
+       <UserPage :userInfo="match" :match="false" :openUserPage.sync="openUserPage" @closeUserPage="val => openUserPage = val"/>
+       <MatchPage :matchInfo="match" :userInfo="user" :openMatchPage.sync="openMatchPage" @closeMatchPage="val => openMatchPage = val"/>
+       
 
       <div class="row flex flex-center">
         <div class="flex-center flex col-12">
@@ -74,11 +78,16 @@ export default {
   name: 'PageIndex',
 
   components: {
-    VueTinder
+    VueTinder,
+    UserPage: () => import('components/user_page.vue'),
+    MatchPage: () => import('components/match_page.vue'),
   },
   data: () => ({
     queue: [],
     offset: 0,
+    match: {},
+    openUserPage: false,
+    openMatchPage: false,
     history: [],
   }),
   created() {
@@ -90,8 +99,9 @@ export default {
     }
   },
   methods: {
-    open(){
-      console.log("vrau")
+    openUser(match){
+      this.match = match
+      this.openUserPage = true
     },
     async getQueue() {
       const { data } = await this.$http.get('clients')
@@ -106,7 +116,14 @@ export default {
       if (this.queue.length === 0) {
         // this.getQueue();
       }
-      await User.decide(item, type)
+      let decision = await User.decide(item, type)
+        console.log("AAAII", decision)
+
+      if (decision){
+        console.log("AAAII", decision)
+        this.match = decision
+        this.openMatchPage = true
+      }
       this.history.push(item);
     },
     async decide(choice) {

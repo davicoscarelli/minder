@@ -53,31 +53,31 @@
                     <label
                     style="font-size: 18pt"
                     class="text-left no-margin no-padding dialogTitle"
-                    > 20
+                    > {{userInfo.age}}
                     </label>
                 </div>
-                <div class="col-4 q-px-md q-pt-md">    
+                <div class="col-4 q-px-md q-pt-md" v-if="match">    
                     <q-btn  :class="`${$q.dark.isActive ? 'text-white' : 'text-primary'}`"  icon="fab fa-instagram" flat round outline />
                     <q-btn  :class="`${$q.dark.isActive ? 'text-white' : 'text-primary'}`"  icon="fab fa-telegram-plane" flat round outline />
                 </div>
                 </div>
-                <div class="col-12 q-pl-md q-mb-sm">
-                   <q-chip v-for="n in 5" :key="n" outline :color="`${$q.dark.isActive ? 'white' : 'primary'}`" :text-color="`${$q.dark.isActive ? 'white' : 'primary'}`" >
-                       Coding
+                <div class="col-12 q-pl-md q-mb-sm" v-if="userInfo.tags">
+                   <q-chip v-for="n in JSON.parse(userInfo.tags)" :key="n" outline :color="`${$q.dark.isActive ? 'white' : 'primary'}`" :text-color="`${$q.dark.isActive ? 'white' : 'primary'}`" >
+                       {{n}}
                    </q-chip>
                 </div>
                 <div class="col-12 q-pl-md q-my-sm">
                     <label
                     style="font-size: 14pt"
                     class="text-leftno-margin no-padding dialogTitle"
-                   > 🌎 Brazil 
+                   > 🌎 {{userInfo.country}}
                     </label>
                 </div>
                 <div class="col-12 q-pl-md q-my-sm">
                     <label
                     style="font-size: 14pt"
                     class="text-leftno-margin no-padding dialogTitle"
-                    > 🎓 Class of 2025
+                    > 🎓 Class of 20{{userInfo.class}}
                     </label>
                 </div>
                 <div class="col-12 q-pl-md q-mt-sm">
@@ -93,9 +93,7 @@
                     <label
                     style="font-size: 14pt"
                     class="text-left no-margin no-padding dialogTitle"
-                    > A classic yellow pencil. Depicted as a graphite pencil, like a U.S. #2 or European HB,
-                     with a sharpened tip and pink eraser. A classic yellow pencil. Depicted as a graphite pencil, like a U.S. #2 or European HB,
-                     with a sharpened tip and pink eraser. 
+                    > {{userInfo.bio}} 
                     </label>
                 </div>
 
@@ -112,6 +110,7 @@ import { openURL } from 'quasar'
 export default {
   props: {
     openUserPage: Boolean,
+    match: Boolean,
     userInfo: Object
   },
   data: () => ({
@@ -121,6 +120,7 @@ export default {
     userShow:{
         get(){
             console.log(this.userInfo)
+            console.log(JSON.parse("[\"coding\", \"playing\", \"exploring\"]"))
           return this.openUserPage
         },
         set(val){

@@ -104,12 +104,13 @@ export class User {
             Notify.create({ type: 'positive', message: `Match with ${data.target.name}!` })
             localStorage.user = JSON.stringify(data.user)
             localStorage.matches = JSON.stringify(data.matchesUsers)
+            return data.target
           }else{
             localStorage.user = JSON.stringify(data)
+            return data
           }
           
           
-          return true
       }
     } catch (e) {
         console.log(e, "AAAAAAAA")

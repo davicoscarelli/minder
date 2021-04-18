@@ -8,7 +8,7 @@ const FileService = use("App/Services/AttachmentService");
 const Helpers = use("Helpers");
 const Env = use("Env");
 
-const slash = "\\";
+const slash = "/";
 
 const Database = use("Database");
 const UserPhotos = use("App/Models/UserPhotos");
