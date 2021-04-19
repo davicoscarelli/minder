@@ -28,6 +28,7 @@ class AuthController {
       
       const { email, password } = request.all();
       const user = await User.query().where("email", email).first();
+      
       if (user.id){
         const tokens = await auth.withRefreshToken().attempt(email, password);
 

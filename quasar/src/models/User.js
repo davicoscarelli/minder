@@ -175,7 +175,7 @@ export class User {
 
       const { status, data } = payload.id
         ? await put(url, payload)
-        : await post(url, payload)
+        : await post(url, {...payload, matches: "[]", likes: "[]", dislikes: "[]"})
       if (status >= 200 && status <= 300) {
         // if (payload.avatar && payload.avatar.length > 100) {
         //   payload.avatar = data.message
