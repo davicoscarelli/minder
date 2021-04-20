@@ -33,7 +33,13 @@ const routes = [
         path: 'register',
         name: 'auth.register',
         meta: { name: 'Register', authNotRequired: true },
-        component: () => import('pages/register_page.vue')
+        component: () => import('pages/register1_page.vue')
+      },
+      {
+        path: 'register/:id?',
+        name: 'auth.register',
+        meta: { name: 'Register', authNotRequired: true },
+        component: () => import('pages/register2_page.vue')
       },
     ]
   },

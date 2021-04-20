@@ -46,15 +46,19 @@ export class User {
           localStorage.setItem('refresh_token', data.tokens.refreshToken)
           localStorage.setItem('matches', JSON.stringify(data.matchesUsers))
         
-        Notify.create({ type: 'positive', message: `Welcome!` })
+        if (!credencials.register){
+          Notify.create({ type: 'positive', message: `Welcome!` })
+        }
         return true
       }
     } catch (e) {
         console.log(e, "AAAAAAAA")
-        Notify.create({ 
-          type: 'negative',
-          message: `Login or password incorrect!`
-        })
+        if(!credencials.register){
+          Notify.create({ 
+            type: 'negative',
+            message: `Login or password incorrect!`
+          })
+        }
         return false
       
     }
@@ -175,23 +179,15 @@ export class User {
 
       const { status, data } = payload.id
         ? await put(url, payload)
-        : await post(url, {...payload, matches: "[]", likes: "[]", dislikes: "[]"})
+        : await post(url, payload)
       if (status >= 200 && status <= 300) {
-        // if (payload.avatar && payload.avatar.length > 100) {
-        //   payload.avatar = data.message
-        //   payload.avatar_url = `${data.message}`
-        // }
-        // payload.avatar = payload.avatar_url
-        // payload.payment_info = {}
-        // payload.paymentStatus = data.paymentStatus
-        localStorage.user = JSON.stringify(payload)
-        
-        return true
+        localStorage.user = JSON.stringify(data)
+        return data
       }
       
     } catch (e) {
       Notify.create({ type: 'negative', message: `User not created!` })
-      return e
+      return false
     }
   }
 
