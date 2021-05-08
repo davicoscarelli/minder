@@ -36,9 +36,17 @@ class User extends Model {
       "password",
       "likes",
       "dislikes",
-      "matches"
+      "matches",
+      "age",
+      "class",
+      "country",
+      "bio",
+      "tags",
+      "instagram",
+      "telegram"
     ];
   }
+
   static get computed() {
     return ["avatar_url"];
   }

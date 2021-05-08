@@ -191,6 +191,7 @@ export default {
     },
     async getMatches(){
       this.matches =  await User.getMatches()
+      console.log("matches", this.matches)
     },
     
     changeTheme() {

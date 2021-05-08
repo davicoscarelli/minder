@@ -50,7 +50,7 @@
                   size="100px"
                 />
               </div>
-              <div class="col-12 col-md-6">
+              <div class="col-12">
                 <label class="text-accent text-bold ajust" for="name">
                   Name
                 </label>
@@ -68,7 +68,7 @@
 
               
 
-              <div class="col-12 col-md-6">
+              <!-- <div class="col-12 col-md-6">
                 <label class="text-accent text-bold ajust" for="email"
                   >Email</label
                 >
@@ -83,7 +83,67 @@
                   :rules="[val => !!val || 'Required', isValidEmail]"
 
                 />
-              </div>
+              </div> -->
+            </div>
+
+            <div class="col-12">
+              <label class="text-accent text-bold ajust" for="name">
+                Tags (What do you like?)
+              </label>
+                <q-select
+                    v-model="form.tags"
+                    use-input
+                    class="q-mt-sm"
+                    id="tags"
+                    rounded
+                    outlined
+                    use-chips
+                    multiple
+                    hide-dropdown-icon
+                    input-debounce="0"
+                    new-value-mode="add-unique"
+                />
+            </div>
+            <div class="col-12">
+              <label class="text-accent text-bold ajust" for="bio">
+                Bio
+              </label>
+              <q-input
+                class="q-mt-sm"
+                id="bio"
+                rounded
+                outlined
+                type="textarea"
+                v-model="form.bio"
+                :rules="[val => !!val || 'Required']"
+              />
+            </div>
+
+            <div class="col-12">
+              <label class="text-accent text-bold ajust" for="telegram">
+                Telegram 
+              </label>
+              <q-input
+                class="q-mt-sm"
+                id="telegram"
+                rounded
+                maxlength="60"
+                outlined
+                v-model="form.telegram"
+              />
+            </div>
+            <div class="col-12">
+              <label class="text-accent text-bold ajust" for="instagram">
+                Instagram
+              </label>
+              <q-input
+                class="q-mt-sm"
+                id="instagram"
+                rounded
+                maxlength="60"
+                outlined
+                v-model="form.instagram"
+              />
             </div>
 
             <PhotoSelect
@@ -203,7 +263,8 @@ export default {
     async update() {
       this.loading = true
       console.log(this.form.images)
-      const success = await User.register(this.form)
+      let tags = this.form.tags ? JSON.stringify(this.form.tags) : "[]"
+      const success = await User.register({...this.form, tags: tags})
       if (success){
         this.loading = false
         this.success = true
@@ -222,7 +283,9 @@ export default {
       console.log("aaaaa", data)
       
       // Object.assign(this.form, data)
-      this.form = data
+      let tags = [] 
+      if (data.tags) tags = JSON.parse(data.tags)
+      this.form = {...data, tags: tags}
       if (data.avatar){
         //this.avatar = user.avatar_url
         this.avatar = {photo: data.avatar}

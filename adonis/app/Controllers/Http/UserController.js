@@ -241,12 +241,14 @@ class UserController {
   async update ({ params, request, response, auth }) {
     try{
       const allRequest = request.all();
+      //console.log(allRequest, "CHEGOUU")
 
       let avatar_url =  ''
 
       let slash = "/"
       
       const loggedUser = await auth.getUser();
+
 
       const user = ModelHelper.fillable(allRequest, [...User.fillable, "id"]);
       
@@ -268,7 +270,7 @@ class UserController {
 
           let userCurrentAvatar = loggedUser.avatar;
           if (userCurrentAvatar != null ) {
-            const start = userCurrentAvatar.indexOf('${slash}user_storage');
+            const start = userCurrentAvatar.indexOf(`${slash}user_storage`);
             const end = userCurrentAvatar.length;
             userCurrentAvatar = userCurrentAvatar.substring(start, end);
             StorageUser.removeFile(`.${slash}public${userCurrentAvatar}`);
@@ -284,11 +286,12 @@ class UserController {
       
 
       const userUpdated = await User.find(user.id);
+      console.log(userUpdated, "VRAUU")
       
       return response.status(201).send(userUpdated);
 
     }catch(e){
-      console.log(e)
+      console.log(e, "aaaaa")
       trx.rollback();
       return response.status(400).send('notUpdated');
     }

@@ -117,7 +117,7 @@ export default {
         // this.getQueue();
       }
       let decision = await User.decide(item, type)
-        console.log("AAAII", decision)
+        console.log("DECISIONN", decision)
 
       if (decision){
         console.log("AAAII", decision)

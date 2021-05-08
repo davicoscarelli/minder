@@ -71,17 +71,19 @@ export class User {
         if (status === 200) {
             let user = localStorage.getItem("user")
             user = JSON.parse(user)
+
             
-            // console.log(JSON.stringify(data.matches), user.matches)
+            console.log(JSON.stringify(data.matches), user.matches, data.matchesUsers)
             if (user.matches != JSON.stringify(data.matches)){
               Notify.create({ type: 'positive', message: `Match with ${data.matchesUsers[data.matchesUsers.length - 1].name}!` })
               localStorage.user = JSON.stringify({...user, matches: JSON.stringify(data.matches)})
               localStorage.matches = JSON.stringify(data.matchesUsers)
+              return data.matchesUsers
             }else{
               localStorage.matches = JSON.stringify(data.matchesUsers)
+              return data.matchesUsers
             }
           
-            return data.matchesUsers
         }
       }
     } catch (e) {
@@ -108,10 +110,10 @@ export class User {
             Notify.create({ type: 'positive', message: `Match with ${data.target.name}!` })
             localStorage.user = JSON.stringify(data.user)
             localStorage.matches = JSON.stringify(data.matchesUsers)
-            return data.target
+            return data
           }else{
             localStorage.user = JSON.stringify(data)
-            return data
+            return false
           }
           
           
