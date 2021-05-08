@@ -182,11 +182,12 @@ class UserController {
     try {
       let newUser = request.all()
       const user = await User.create(newUser);
+      console.log(newUser)
 
       return response.status(201).send(user);
       
     } catch (error) {
-      console.log(error)
+      console.log("AAAAA", error)
     }
     
   }
