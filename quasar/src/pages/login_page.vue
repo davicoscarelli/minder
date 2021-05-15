@@ -13,12 +13,17 @@
   padding-left: 45px
 
 .page
-  background-color: #aa4f5e3b
+   background: linear-gradient(to top, #f32b60, #ff8f1f)
+
 .col-login
   width: 400px
   height: 450px
 
 
+.logo
+  height: 100%
+  width: 80px
+  margin-top: 25px
 
 @media (max-width: 878px) 
   .presentation-text
@@ -35,26 +40,26 @@
 
 <template>
   <q-page class="page">
-    <div class="row">
+    <div class="row ">
       <div class="col">
         <div class="row q-pa-md justify-center q-col-gutter-md">
           <div class="col-login items-center q-mb-xl">
-            <div class="col q-pa-md">
-              <label class="text-primary text-bold title">
-                Welcome
-              </label>
+            <div class="col-12 text-center q-my-md">
+                <q-img src="images/logo.png" class="logo"/>
+                <h2 class="text-white q-mt-md">minder</h2>
             </div>
-            <q-card class="login-card">
+            <div class="col q-pa-md q-mt-md">
               <q-form class="row" @submit="login()">
                 <div class="col-12">
-                  <label class="text-primary text-bold ajust" for="email"
+                  <label class="text-white text-bold ajust" for="email"
                     >Email</label
                   >
                   <q-input
                     class="q-mt-sm "
                     id="email"
-                    rounded
-                    outlined
+                    input-class="text-black"
+                    rounded standout 
+                    bg-color="white"
                     v-model="form.email"
                     placeholder="E-mail"
                   >
@@ -65,14 +70,15 @@
                 </div>
 
                 <div class="col-12 q-mt-md">
-                  <label class="text-primary text-bold ajust" for="password">
+                  <label class="text-white text-bold ajust" for="password">
                     Password
                   </label>
                   <q-input
                     class="q-mt-sm"
                     id="password"
-                    rounded
-                    outlined
+                    input-class="text-black"
+                    rounded standout 
+                    bg-color="white"
                     v-model="form.password"
                     placeholder="Password"
                     :type="isPwd ? 'password' : 'text'"
@@ -98,7 +104,7 @@
                       }}</label>
                 </div> -->
                 
-                <div class="col-12 self-center">
+                <div class="col-12 self-center q-mt-md" >
                   <div class="row justify-center">
                     <q-btn
                       class="login-button text-bold q-mt-md q-px-md"
@@ -107,7 +113,8 @@
                       rounded
                       color="primary"
                       label="Login"
-                      size="15px"
+                      size="20px"
+                      :loading="loading"
                       type="submit"
                     />
                   </div>
@@ -118,15 +125,15 @@
                       no-caps
                       rounded
                       outline
-                      color="primary"
+                      color="white"
                       label="Register"
-                      size="15px"
+                      size="20px"
                       @click="$router.push('/auth/register')"
                     />
                   </div>
                 </div>
               </q-form>
-            </q-card>
+            </div>
           </div>
 
           
@@ -145,15 +152,20 @@ export default {
     form: {},
     verifyAccount: false,
     isPwd: true,
+    loading: false
   }),
   created(){
       this.$q.dark.set(false)
   },
   methods: {
     async login() {
+      this.loading = true
       const success = await new User().login(this.form)
       if (success){
+        this.loading = false
         window.location.href = '/'
+      }else{
+        this.loading = false
       }
     },
   }

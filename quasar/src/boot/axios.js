@@ -4,7 +4,7 @@ import axios from 'axios'
 
 axios.defaults.baseURL =
   process.env.NODE_ENV === 'production'
-    ? 'https://apiminder.herokuapp.com'
+    ? 'https://api.minder.minerva.community'
     : 'http://localhost:3333'
    
 

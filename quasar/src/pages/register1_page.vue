@@ -2,6 +2,8 @@
 .stepper
   height: 10px
 
+.page
+  background-color: #aa4f5e3b
 
 .btn-size
   width: 130px
@@ -31,13 +33,13 @@
 </style>
 
 <template>
-  <q-page>
+  <q-page class="page">
     <div class="row q-pa-sm q-mb-md justify-center">
       <h5 class="text-bold text-primary text-left">
         Register
       </h5>
     </div>
-    <div class="row justify-center">
+    <div class="row justify-center q-px-md">
       <q-form class="q-mx-md q-mb-xl" @submit="register">
         <div class="row justify-center q-col-gutter-sm">
           <div class="col-12 col-md-6">
@@ -148,7 +150,7 @@
         
         <div class="justify-center q-mt-md flex q-gutter-sm">
           <q-btn
-            @click="$router.push('/auth/login')"
+            @click="$router.push('/login')"
             class="q-mx-md q-px-md text-bold btn-size"
             unelevated
             rounded
@@ -164,6 +166,7 @@
             unelevated
             rounded
             :loading="loading"
+            :disabled="loading"
             no-caps
             color="positive"
             label="Next"
@@ -246,17 +249,17 @@ export default {
     isValidPassword(val){        
         if (val.length > 7) {
           
-            if (!/\d/.test(val)) return this.$t('register.musthavenum')
-            if (!/[a-zA-Z]/.test(val)) return this.$t('register.musthavecha')
+            if (!/\d/.test(val)) return 'A least 1 number'
+            if (!/[a-zA-Z]/.test(val)) return 'A least 1 character'
           
         } else {
-          return this.$t('register.musthave8')
+          return 'Min length: 8'
         }
         
     },
     isValidEmail (val) {
     const emailPattern = /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/;
-    return emailPattern.test(val) || this.$t('general.invalidEmail');
+    return emailPattern.test(val) || 'Invalid Email';
     },
   },
 }

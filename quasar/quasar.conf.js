@@ -114,14 +114,19 @@ module.exports = function (/* ctx */) {
     pwa: {
       workboxPluginMode: 'GenerateSW', // 'GenerateSW' or 'InjectManifest'
       workboxOptions: {}, // only for GenerateSW
+      metaVariables: {
+        appleMobileWebAppCapable: 'yes',
+        appleMobileWebAppStatusBarStyle: 'default',
+        msapplicationTileColor: '#b60a4c'
+      },
       manifest: {
         name: `Minder`,
         short_name: `Minder`,
         description: `Not a Tinder knock off`,
         display: 'standalone',
         orientation: 'portrait',
-        background_color: '#ffffff',
-        theme_color: '#027be3',
+        background_color: '#b60a4c',
+        theme_color: '#b60a4c',
         icons: [
           {
             src: 'icons/icon-128x128.png',

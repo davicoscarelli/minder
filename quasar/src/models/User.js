@@ -39,7 +39,6 @@ export class User {
 
     try {
       const { data, status } = await post('auth/login', credencials)
-      console.log(credencials)
       if (status === 200) {
           localStorage.user = JSON.stringify(data.user)
           localStorage.setItem('access_token', data.tokens.token)
@@ -73,15 +72,15 @@ export class User {
             user = JSON.parse(user)
 
             
-            console.log(JSON.stringify(data.matches), user.matches, data.matchesUsers)
+            // console.log(JSON.stringify(data.matches), user.matches, data.matchesUsers)
             if (user.matches != JSON.stringify(data.matches)){
-              Notify.create({ type: 'positive', message: `Match with ${data.matchesUsers[data.matchesUsers.length - 1].name}!` })
+              //Notify.create({ type: 'positive', message: `Match with ${data.matchesUsers[data.matchesUsers.length - 1].name}!` })
               localStorage.user = JSON.stringify({...user, matches: JSON.stringify(data.matches)})
               localStorage.matches = JSON.stringify(data.matchesUsers)
-              return data.matchesUsers
+              return {allMatches: data.matchesUsers, match: data.matchesUsers[data.matchesUsers.length - 1], user: user}
             }else{
               localStorage.matches = JSON.stringify(data.matchesUsers)
-              return data.matchesUsers
+              return {allMatches: data.matchesUsers, user: user}
             }
           
         }
@@ -105,12 +104,12 @@ export class User {
     try {
       const { data, status } = await post(url, {target_user: item.id})
       if (status === 200) {
-          let user = localStorage.getItem("user")
-          if (data.target && (user.matches != data.target.matches)){
-            Notify.create({ type: 'positive', message: `Match with ${data.target.name}!` })
+          if (data.target && (data.user.matches != data.target.matches)){
+            // Notify.create({ type: 'positive', message: `Match with ${data.target.name}!` })
             localStorage.user = JSON.stringify(data.user)
             localStorage.matches = JSON.stringify(data.matchesUsers)
-            return data
+            console.log("GGGGRRR", data.target)
+            return data.target
           }else{
             localStorage.user = JSON.stringify(data)
             return false
@@ -175,7 +174,7 @@ export class User {
   }
 
   static async register (payload) {
-    console.log("psyloadddd", payload)
+    // console.log("psyloadddd", payload)
     try {
       const url = payload.id ? `clients/${payload.id}` : 'clients'
 

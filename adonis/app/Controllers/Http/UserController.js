@@ -87,7 +87,7 @@ class UserController {
 
         
         if (targetUser.likes.includes(loggedUser.id)) {
- 
+          console.log("VRAUU")
           let userMatches = [targetUser.id].concat(JSON.parse(loggedUser.matches))
           let targetMatches = [loggedUser.id].concat(JSON.parse(targetUser.matches))
           console.log("MATCHH user", userMatches)
@@ -97,7 +97,7 @@ class UserController {
           await targetUser.save();
           await loggedUser.save();
 
-          let matches = JSON.parse(userMatches)
+          let matches = userMatches
 
           let matchesUsers = await User.query().whereIn('id', matches).with('photos').fetch()
 
@@ -179,6 +179,7 @@ class UserController {
    * @param {Response} ctx.response
    */
   async store ({ request, response }) {
+    console.log("ENTROUUU")
     try {
       let newUser = request.all()
       const user = await User.create(newUser);

@@ -1,6 +1,6 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
+    <q-header style="background: linear-gradient(to top right, #f32b60, #ff8f1f)" elevated>
       <q-toolbar>
         <q-btn
           flat
@@ -11,11 +11,11 @@
           aria-label="Mathces"
           @click="leftDrawerOpen = !leftDrawerOpen"
         />
-        <q-space />
-        <q-toolbar-title class="text-center">
+        <q-toolbar-title @click="$router.push('/')" class="text-center cursor-pointer">
+          <!-- <q-img src="images/logo.png" style="width: 20px; height: 100%" class="q-mr-sm"/> -->
+
           minder
         </q-toolbar-title>
-        <q-space />
 
         <div>
           <q-btn
@@ -80,6 +80,8 @@
       
     </q-drawer>
 
+    <MatchPage :matchInfo="match" :userInfo="user" :openMatchPage.sync="openMatchPage" @closeMatchPage="val => openMatchPage = val"/>
+
     <UserPage :userInfo="match" :match="true" :openUserPage.sync="openUserPage" @closeUserPage="val => openUserPage = val"/>
 
     <q-drawer
@@ -97,7 +99,7 @@
         >
           <q-img
             ref="current_photo"
-            :src="user.avatar ? user.avatar_url : 'images/avatar.png'"
+            :src="user.avatar_url || 'images/avatar.png'"
            
           />
           
@@ -162,21 +164,51 @@
       <router-view />
     </q-page-container>
   
+    <q-page-sticky position="bottom" class="" :offset="[0, 0]">
+      <q-banner v-show="showAppInstallBanner" inline-actions rounded style="background: linear-gradient(to top right, #f32b60, #ff8f1f)" class="text-white">
+        <template v-slot:avatar>
+          <img
+            src="icons/icon-128x128.png"
+            style="width: 50px; border: 1.5px solid #fff; border-radius: 15px"  
+          >
+        </template>
+        Install Minder?
+
+        <template v-slot:action>
+          <q-btn flat label="Yes" @click="installApp"/>
+          <q-btn flat label="Later" @click="showAppInstallBanner = false"/>
+        </template>
+      </q-banner>
+     </q-page-sticky>
+
   </q-layout>
+
 </template>
 
 <script>
 import { User } from 'src/models/User'
 
+let deferredPrompt
 
 export default {
   name: 'MainLayout',
   computed: {
-    user() {
+    getUser() {
+      this.user = User.getUser()
       return User.getUser()
     },
     iconColor() {
       return this.$q.dark.isActive ? 'white' : 'primary'
+    }
+  },
+  mounted(){
+    let neverShowAppInstallBanner = localStorage.getItem('neverShowAppInstallBanner')
+    if (!neverShowAppInstallBanner){
+      console.log('YEEE')
+      window.addEventListener('beforeinstallprompt', (e) => {
+        deferredPrompt = e;
+        this.showAppInstallBanner = true
+      })
     }
   },
   created(){
@@ -185,13 +217,33 @@ export default {
     this.timer = setInterval(this.getMatches, 1000)
   },
   methods: {
+    installApp(){
+      this.showAppInstallBanner = false,
+      deferredPrompt.prompt()
+      deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted'){
+          this.neverShowAppInstallBanner()
+        }
+      })
+    },
+    neverShowAppInstallBanner(){
+      this.showAppInstallBanner = false
+      localStorage.set('neverShowAppInstallBanner', true)
+    },
     openUser(match){
       this.match = match
       this.openUserPage = true
     },
     async getMatches(){
-      this.matches =  await User.getMatches()
-      console.log("matches", this.matches)
+      let matches =  await User.getMatches()
+      // console.log("matches", this.matches)
+      this.matches = matches.allMatches
+      // console.log(matches.user)
+      this.user = matches.user
+      if (matches.match){
+        this.match = matches.match
+        this.openMatchPage = true
+      }
     },
     
     changeTheme() {
@@ -205,7 +257,7 @@ export default {
       await User.logout()
       this.loading = false
 
-      this.$router.push('/auth/login')
+      this.$router.push('/login')
       
     },
     
@@ -213,13 +265,18 @@ export default {
   },
   components: {
     UserPage: () => import('components/user_page.vue'),
+    MatchPage: () => import('components/match_page.vue'),
+
   },
   data () {
     return {
       matches: [],
       timer: '',
       match: {},
+      user: {},
+      showAppInstallBanner: false,
       openUserPage: false,
+      openMatchPage: false,
       leftDrawerOpen: false,
       rightDrawerOpen: false,
     }

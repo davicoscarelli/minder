@@ -29,7 +29,7 @@
                 <div class="row q-py-xl justify-evenly">
                     <div class="col-5 flex justify-end">
                         <q-avatar class="q-my-md text-bold shadow-8" size="120px">
-                            <q-img :src="userInfo.avatar ? userInfo.avatar_url : 'images/avatar.png'"/>
+                            <q-img :src="userInfo.avatar_url ? userInfo.avatar_url : 'images/avatar.png'"/>
                         </q-avatar>
                     </div>
                     <div class="col-2 flex flex-center">
@@ -39,7 +39,7 @@
                     </div>
                     <div class="col-5 flex justify-start">
                         <q-avatar class="q-my-md text-bold shadow-8" size="120px">
-                            <q-img :src="matchInfo.avatar ? matchInfo.avatar_url : 'images/avatar.png'"/>
+                            <q-img :src="matchInfo.avatar_url ? matchInfo.avatar_url : 'images/avatar.png'"/>
                         </q-avatar>
                     </div>
                 </div>
@@ -47,8 +47,8 @@
                     <label style="font-size: 18pt">Start a conversation now!</label>
                 </div>
                 <div class="col-12 flex flex-center q-px-md">    
-                    <q-btn size="25px" :class="`${$q.dark.isActive ? 'text-white' : 'text-primary'}`"  icon="fab fa-instagram" flat round outline />
-                    <q-btn size="25px" :class="`${$q.dark.isActive ? 'text-white' : 'text-primary'}`"  icon="fab fa-telegram-plane" flat round outline />
+                    <q-btn v-if="matchInfo.instagram" @click="openLink(`https://www.instagram.com/${matchInfo.instagram.replace('@','')}`)" size="25px" :class="`${$q.dark.isActive ? 'text-white' : 'text-primary'}`"  icon="fab fa-instagram" flat round outline />
+                    <q-btn v-if="matchInfo.telegram" @click="openLink(`https://t.me/${matchInfo.telegram.replace('@','')}`)" size="25px" :class="`${$q.dark.isActive ? 'text-white' : 'text-primary'}`"  icon="fab fa-telegram-plane" flat round outline />
                 </div>
                 <div class="text-center q-mt-md">
                     <label style="font-size: 12pt">or</label>
@@ -90,6 +90,7 @@ export default {
   computed: {
     matchShow:{
         get(){
+          console.log('AAAAAAAAMSMSJDNJ', this.userInfo, this.matchInfo)
           return this.openMatchPage
         },
         set(val){

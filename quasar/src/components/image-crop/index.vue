@@ -32,6 +32,22 @@
             ref="cropper"
           />
         </div>
+        <div v-else-if="photo" class="upload text-center q-my-md">
+          <q-avatar
+            class="text-uppercase shadow-8 text-bold"
+            color="dark"
+            size="240px"
+            text-color="white"
+            :ratio="ratio"
+          >
+            <q-img
+            :ratio="ratio"
+            ref="current_photo"
+            :src="photo"
+           
+          />
+          </q-avatar>
+        </div>
         <div v-else class="upload text-center q-my-md">
           <q-avatar
             class="text-uppercase shadow-8 text-bold"
@@ -41,12 +57,12 @@
             :ratio="ratio"
           >
             <div style="font-size: 16px">
-              {{ $t('imageCrop.noImage') }}
+              No Image
             </div>
           </q-avatar>
         </div>
         <q-btn
-          :label="photo ? $t('imageCrop.change') : $t('imageCrop.select')"
+          :label="photo ? 'Change' : 'Select'"
           class="text-bold"
           rounded
           no-caps
@@ -65,7 +81,7 @@
         <q-separator class="q-mt-md q-mb-xs" />
         <q-card-actions align="around" class="q-pb-md q-pt-sm">
           <q-btn
-            :label="$t('general.cancel')"
+            :label="'Cancel'"
             rounded
             no-caps
             class="text-bold"
@@ -77,7 +93,7 @@
             size="15px"
           />
           <q-btn
-            :label="$t('general.confirm')"
+            :label="'Confirm'"
             rounded
             no-caps
             class="text-bold"
@@ -134,8 +150,8 @@ export default {
       
       if (!file) return
       this.imageSize = file.size
-      if (file.type.search('jpeg') === -1) return this.invalid('v')
-      if (file.size > 12582912) return this.invalid('s')
+      //if (file.type.search('jpeg') === -1) return this.invalid('v')
+      //if (file.size > 12582912) return this.invalid('s')
       
       const reader = new FileReader()
       reader.onload = e => {

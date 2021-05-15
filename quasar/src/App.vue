@@ -16,7 +16,6 @@ export default {
         const user = data
         
         localStorage.user = JSON.stringify(user)
-        console.log(data)
       }
     }
   },

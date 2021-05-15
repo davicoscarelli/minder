@@ -2,6 +2,9 @@
 .stepper
   height: 10px
 
+.page
+  background-color: #aa4f5e3b
+
 
 .btn-size
   width: 130px
@@ -31,15 +34,15 @@
 </style>
 
 <template>
-  <q-page>
-    <div class="row q-pa-sm q-mb-md justify-center">
-      <h5 class="text-bold text-primary text-left">
+  <q-page class="page">
+    <div class=" row q-px-sm q-pt-sm  justify-center">
+      <h5 class="q-mb-md q-pb-md text-bold text-primary text-left">
         Profile Setup
       </h5>
     </div>
-    <div class="row justify-center">
+    <div class="row justify-center q-px-md">
 
-      <q-form class="q-mb-xl" @submit="update()">
+      <q-form class="q-mb-xl" @submit="finish()">
             <div class="row justify-center q-col-gutter-sm">
               <div class="col-12 flex flex-center">
                 <ImageCrop
@@ -84,13 +87,14 @@
             </div>
             </div>
             <div class="col-12 col-md-6">
-              <label class="text-accent text-bold ajust" for="name">
+              <label class="text-accent text-bold ajust" for="telegram">
                 Telegram 
               </label>
               <q-input
                 class="q-mt-sm"
-                id="name"
-                ref="formname"
+                id="telegram"
+                ref="telegram"
+                placeholder="yourUsername"
                 rounded
                 maxlength="60"
                 outlined
@@ -98,13 +102,14 @@
               />
             </div>
             <div class="col-12 col-md-6">
-              <label class="text-accent text-bold ajust" for="name">
+              <label class="text-accent text-bold ajust" for="instagram">
                 Instagram
               </label>
               <q-input
-                class="q-mt-sm"
-                id="name"
-                ref="formname"
+                class="q-mt-sm q-mb-md"
+                id="instagram"
+                ref="instagram"
+                placeholder="yourUsername"
                 rounded
                 maxlength="60"
                 outlined
@@ -125,6 +130,8 @@
               unelevated
               rounded
               no-caps
+              :loading="loading"
+              :disabled="loading"
               color="positive"
               label="Finish"
               size="16px"
@@ -134,7 +141,7 @@
     </div>
 
     
-    <q-dialog v-model="success">
+    <q-dialog v-model="success" @hide="$router.push('/login')">
         <q-card class="text-center" style="border-radius: 15px; width: 300px">
           <q-card-section class=" col-12 text-center q-mt-sm">
             
@@ -159,7 +166,7 @@
                 style="width: 150px; font-size: 12pt"
                 no-caps
                 rounded
-                @click="$router.push('/auth/login')"
+                @click="$router.push('/login')"
                 v-close-popup
               />
             </q-card-actions>
@@ -219,14 +226,20 @@ export default {
     changeFile() {
       this.getUserData(true)
     },
-    async update() {
+    finish(){
       this.loading = true
+      this.update()
+
+    },
+    async update() {
       console.log(this.form.images)
       let tags = this.form.tags ? JSON.stringify(this.form.tags) : "[]"
       const success = await User.register({
         bio: this.form.bio,
         avatar: this.form.avatar,
         tags: tags,
+        instagram: this.form.instagram,
+        telegram: this.form.telegram,
         id: this.user.id,
       })
       if (success && !this.avatarchanged){
@@ -261,7 +274,7 @@ export default {
         this.avatar = {photo: data.avatar}
         data.avatar = null
       }else{
-        this.avatar = {photo: 'images/avatar.png'}
+        this.avatar = {photo: null}
       }
       console.log(this.form, "forrmm")
       localStorage.user = JSON.stringify(data)

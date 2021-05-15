@@ -29,9 +29,9 @@
                     infinite
                     >
 
-                    <q-carousel-slide v-if="userInfo.photos && userInfo.photos.length == 0" :name="0" :img-src="'https://instagram.fbvb2-1.fna.fbcdn.net/v/t51.2885-15/e35/150472018_722140988494711_4586550391134516284_n.jpg?tp=1&_nc_ht=instagram.fbvb2-1.fna.fbcdn.net&_nc_cat=107&_nc_ohc=7q7DsGX4lL4AX9tIylw&ccb=7-4&oh=355333cfd2e0f254309df581c039b0be&oe=6083D7BB&_nc_sid=83d603'"/>
+                    <q-carousel-slide v-if="userInfo.photos && userInfo.photos.length == 0" :name="0" :img-src="'images/no-image.png'"/>
 
-                    <q-carousel-slide v-else v-for="photo in userInfo.photos" :key="photo.name" :name="photo.name" :img-src="'https://instagram.fbvb2-1.fna.fbcdn.net/v/t51.2885-15/e35/150472018_722140988494711_4586550391134516284_n.jpg?tp=1&_nc_ht=instagram.fbvb2-1.fna.fbcdn.net&_nc_cat=107&_nc_ohc=7q7DsGX4lL4AX9tIylw&ccb=7-4&oh=355333cfd2e0f254309df581c039b0be&oe=6083D7BB&_nc_sid=83d603'"/>
+                    <q-carousel-slide v-else v-for="photo in userInfo.photos" :key="photo.id" :name="photo.name" :img-src="photo.url"/>
                     
                 
                     <template v-slot:control>
@@ -57,8 +57,8 @@
                     </label>
                 </div>
                 <div class="col-4 q-px-md q-pt-md" v-if="match">    
-                    <q-btn  :class="`${$q.dark.isActive ? 'text-white' : 'text-primary'}`"  icon="fab fa-instagram" flat round outline />
-                    <q-btn  :class="`${$q.dark.isActive ? 'text-white' : 'text-primary'}`"  icon="fab fa-telegram-plane" flat round outline />
+                    <q-btn v-if="userInfo.instagram" @click="openLink(`https://www.instagram.com/${userInfo.instagram.replace('@','')}`)" :class="`${$q.dark.isActive ? 'text-white' : 'text-primary'}`"  icon="fab fa-instagram" flat round outline />
+                    <q-btn v-if="userInfo.telegram" @click="openLink(`https://t.me/${userInfo.telegram.replace('@','')}`)" :class="`${$q.dark.isActive ? 'text-white' : 'text-primary'}`"  icon="fab fa-telegram-plane" flat round outline />
                 </div>
                 </div>
                 <div class="col-12 q-pl-md q-mb-sm" v-if="userInfo.tags">
@@ -119,9 +119,14 @@ export default {
   computed: {
     userShow:{
         get(){
-            console.log(this.userInfo)
-            console.log(JSON.parse("[\"coding\", \"playing\", \"exploring\"]"))
-          return this.openUserPage
+            // console.log(this.userInfo)
+            if (this.userInfo.photos && this.userInfo.photos.length != 0){
+                    this.userInfo.photos.map((photo) =>{
+                    photo.name =  this.userInfo.photos.indexOf(photo)
+                })
+            }
+            // console.log(JSON.parse("[\"coding\", \"playing\", \"exploring\"]"))
+            return this.openUserPage
         },
         set(val){
           this.$emit('closeUserPage', val)

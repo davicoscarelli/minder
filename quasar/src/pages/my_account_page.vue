@@ -1,44 +1,16 @@
 <style lang="sass" scoped>
-.stepper
-  height: 10px
-
 
 .btn-size
   width: 130px
 
-.container 
-  width: 100%
-  height: 0
-  padding-bottom: 33%
-  position: relative
- 
-
-
-@media (max-width: $breakpoint-xs-max)
-  .container 
-    padding-bottom: 100%
-
-.iframe 
-  display: block
-  position: absolute
-  top: 0
-  left: 0
-  bottom: 0
-  right: 0
-  width: 100%
-  height: 100%
 
 
 </style>
 
 <template>
-  <q-page>
-      <div class="q-pa-md">
-    
-        <div class="row q-pa-sm q-mb-md justify-center">
-          
-        </div>
-        <div class="row justify-center">
+  <q-page class="q-pa-md">
+  
+        <div class="col-12 justify-center">
           <q-form class="q-mb-xl" @submit="update()">
             <div class="row justify-center q-col-gutter-sm">
               <div class="col-12 flex flex-center">
@@ -46,7 +18,7 @@
                   @change="changePhoto"
                   :photo="avatar.photo"
                   :ratio="1"
-                  class="q-mr-md"
+                  class=""
                   size="100px"
                 />
               </div>
@@ -55,7 +27,7 @@
                   Name
                 </label>
                 <q-input
-                  class="q-mt-sm"
+                  class="q-mt-sm q-mb-sm"
                   id="name"
                   ref="formname"
                   rounded
@@ -93,7 +65,7 @@
                 <q-select
                     v-model="form.tags"
                     use-input
-                    class="q-mt-sm"
+                    class="q-mt-sm q-mb-sm"
                     id="tags"
                     rounded
                     outlined
@@ -109,7 +81,7 @@
                 Bio
               </label>
               <q-input
-                class="q-mt-sm"
+                class="q-mt-sm q-mb-sm"
                 id="bio"
                 rounded
                 outlined
@@ -124,8 +96,9 @@
                 Telegram 
               </label>
               <q-input
-                class="q-mt-sm"
+                class="q-mt-sm q-mb-sm"
                 id="telegram"
+                placeholder="yourUsername"
                 rounded
                 maxlength="60"
                 outlined
@@ -137,8 +110,9 @@
                 Instagram
               </label>
               <q-input
-                class="q-mt-sm"
+                class="q-mt-sm q-mb-sm"
                 id="instagram"
+                placeholder="yourUsername"
                 rounded
                 maxlength="60"
                 outlined
@@ -167,7 +141,6 @@
         </div>
         
         
-        </div>
 
 
 
@@ -202,7 +175,6 @@
                 style="width: 150px; font-size: 12pt"
                 no-caps
                 rounded
-                @click="$router.go(0)"
                 v-close-popup
               />
             </q-card-actions>
@@ -257,15 +229,24 @@ export default {
     
   },
   methods: {
+    
     changeFile() {
       this.getUserData()
     },
     async update() {
-      this.loading = true
+       this.$q.loading.show({
+          //spinner: QSpinnerFacebook,
+          spinnerColor: 'white',
+          thickness:"10",
+          spinnerSize: 140,
+          backgroundColor: 'primary',
+          messageColor: 'white'
+        })
       console.log(this.form.images)
       let tags = this.form.tags ? JSON.stringify(this.form.tags) : "[]"
       const success = await User.register({...this.form, tags: tags})
       if (success){
+        this.$q.loading.hide()
         this.loading = false
         this.success = true
       }
@@ -290,8 +271,6 @@ export default {
         //this.avatar = user.avatar_url
         this.avatar = {photo: data.avatar}
         data.avatar = null
-      }else{
-        this.avatar = {photo: 'images/avatar.png'}
       }
       console.log(this.form, "forrmm")
       localStorage.user = JSON.stringify(data)
