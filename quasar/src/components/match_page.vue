@@ -90,7 +90,6 @@ export default {
   computed: {
     matchShow:{
         get(){
-          console.log('AAAAAAAAMSMSJDNJ', this.userInfo, this.matchInfo)
           return this.openMatchPage
         },
         set(val){

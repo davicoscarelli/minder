@@ -11,11 +11,24 @@
                 <p style="font-size: 20pt" class="text-white text-bold q-mb-none">{{scope.data.name.split(' ').slice(0,2).join(' ')}}</p>
                 <p style="font-size: 18pt" class="text-white q-ml-sm q-mb-none">{{scope.data.age}}</p>
               </div>
-                <div class="col-12 q-mb-sm" v-if="scope.data.tags">
-                   <q-chip v-for="n in JSON.parse(scope.data.tags)" :key="n" outline :color="`${$q.dark.isActive ? 'white' : 'white'}`" :text-color="`${$q.dark.isActive ? 'white' : 'primary'}`" >
+              <div class="col-12 q-my-sm">
+                    <label
+                    style="font-size: 14pt"
+                    class="text-white text-leftdialogTitle"
+                   > 🌎 {{scope.data.country}}
+                    </label>
+
+                    <!-- <label
+                      style="font-size: 14pt"
+                      class="text-white text-leftno-margin no-padding dialogTitle"
+                      > 🎓 Class of 20{{scope.data.class}}
+                    </label> -->
+                </div>
+                <!-- <div class="col-12 q-mb-sm" v-if="scope.data.tags">
+                   <q-chip v-for="n in scope.data.tags" :key="n" outline :color="`${$q.dark.isActive ? 'white' : 'white'}`" :text-color="`${$q.dark.isActive ? 'white' : 'primary'}`" >
                        {{n}}
                    </q-chip>
-                </div>
+                </div> -->
                 <!-- <p style="font-size: 14pt" class="text-white">{{scope.data.bio}}</p> -->
               
             </div>
@@ -115,6 +128,7 @@ export default {
       // console.log("aaaaa", data)
 
       // "https://instagram.fbvb2-1.fna.fbcdn.net/v/t51.2885-15/e35/150472018_722140988494711_4586550391134516284_n.jpg?tp=1&_nc_ht=instagram.fbvb2-1.fna.fbcdn.net&_nc_cat=107&_nc_ohc=7q7DsGX4lL4AX9tIylw&ccb=7-4&oh=355333cfd2e0f254309df581c039b0be&oe=6083D7BB&_nc_sid=83d603"
+      
       this.queue = data.data
       console.log(this.queue, "QUEUE")
       this.loadingQueue = false
